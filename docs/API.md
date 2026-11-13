@@ -35,7 +35,7 @@ References were read before implementation on 2026-11-13:
 | Pin/unpin | Settings API is read-only. Pin lists are edited in normal widget settings |
 | Middle click | Host default settings action retained; users must explicitly free the gesture before optional close/minimize callbacks |
 | Workspace grouping | Representative app icon for workspace groups; window counts cover the full group |
-| Settings pages | A manifest select field plus `visible_when` groups related controls without category-prefixed labels or unsupported sections |
+| Settings editor | All controls are visible together in the host’s Widget section, ordered by topic; no unsupported section/group metadata |
 | Empty state | `barWidget.setVisible(false)` hides the whole widget, while the event subscription stays active |
 | Count badges | Numeric only, for counts above one; paint transforms overlay the icon corner without a layout lane |
 | Manual persistence | In-memory per instance; no undocumented settings write or state file |
@@ -65,3 +65,7 @@ Noctalia’s process implementation creates a process group and cancels the grou
 The fallback never touches `noctalia.compositor` methods when the namespace is absent. On API 52/53, niri and other compositors remain hidden; this release does not invent a native action or event method for them.
 
 Version 0.1.2 adds optional hover magnification using public API 52 paint transforms. Cells reserve the maximum icon size, root extents remain bounded, and animation ends without an idle frame loop. Empty filtered results (including pin-only results with no matching running windows) hide the entire widget.
+
+## Settings-section capability gap
+
+Version 0.1.3 removes the page selector and conditional visibility from all plugin controls. `ManifestField` has no group, heading, or section member. `manifestSettingSpecs` assigns each plugin field the default `WidgetSettingPresentation.group = "widget"`. Built-in widget sections exist internally, but are not exposed through the public plugin schema. Adding an unrecognized `group` property would not create them. See [the focused upstream request](upstream-settings-sections-request.md).

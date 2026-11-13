@@ -2,7 +2,7 @@
 
 A Noctalia **API 52+** application switcher, distributed as one bar widget. Source and installation documentation are in [smart-taskbar/README.md](smart-taskbar/README.md).
 
-Version 0.1.2 is a preview release. The Luau fixture tests and official community manifest validation run locally; live Noctalia desktop validation is pending. Umbriel now works with API 52/53 through its public CLI stream. API 54+ uses native subscriptions. Match the host’s reported API range; version labels alone are insufficient.
+Version 0.1.3 is a preview release. The Luau fixture tests and official community manifest validation run locally; live Noctalia desktop validation is pending. Umbriel now works with API 52/53 through its public CLI stream. API 54+ uses native subscriptions. Match the host’s reported API range; version labels alone are insufficient.
 
 - [Settings reference](docs/settings.md)
 - [Validation and desktop test matrix](docs/TESTING.md)
@@ -32,6 +32,8 @@ Add `omardardery/smart-taskbar:taskbar` in Bar settings. Native enabling and des
 
 Community submission: [draft PR #1434](https://github.com/noctalia-dev/community-plugins/pull/1434). Automated checks pass; live desktop acceptance remains pending.
 
-Update an existing source with `noctalia msg plugins update smart-taskbar`, then enable the plugin again. Version 0.1.2 declares API 52.
+Update an existing source with `noctalia msg plugins update smart-taskbar`, then enable the plugin again. Version 0.1.3 declares API 52.
 
 Version 0.1.2 hides the entire widget when no matching windows remain, shows numeric badges only for duplicates, groups settings through a page selector, and adds optional fixed-cell hover enlargement.
+
+Version 0.1.3 removes the settings-page dropdown. Expand Widget to see all plugin controls together; related settings remain adjacent. Separate plugin accordion sections require a public Noctalia API enhancement.

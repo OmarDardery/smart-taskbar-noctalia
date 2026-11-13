@@ -1,8 +1,8 @@
 # Settings
 
-Use **Settings page** in the normal widget editor to show Behavior, Applications, Layout, Appearance, Interaction, or Advanced controls. All labels omit category prefixes.
+Expand **Widget** in the normal editor. All plugin controls are available together, with related fields adjacent. No dropdown, conditional page visibility, or advanced toggle hides plugin controls. The Area column below describes their ordering; it does not claim native accordion sections. Noctalia’s public plugin API currently has no section/group field.
 
-| Page | Setting | Default | Meaning |
+| Area | Setting | Default | Meaning |
 | --- | --- | --- | --- |
 | Behavior | `expand_mode` | `"hover"` | Hover to reveal running apps, click to toggle, or keep the dock expanded. |
 | Behavior | `hover_delay` | `150` | Wait before opening the application strip on hover. |

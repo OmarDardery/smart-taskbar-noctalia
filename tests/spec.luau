@@ -287,7 +287,7 @@ check("empty state cancels hover motion and recovers without a stuck hover targe
   equal(find(tree,"icon:"..groups[1].key).props.scale,1)
   configure("hover_enlarge",false)
 end)
-check("settings-page navigation preserves expansion and cached icons", function()
+check("legacy editor values preserve expansion and cached icons", function()
   local beforeRenders,beforeIcons,beforeExpanded=renders,resolverCalls,expanded
   settings.settings_page="appearance"; onConfigChanged()
   equal(renders,beforeRenders); equal(resolverCalls,beforeIcons); equal(expanded,beforeExpanded)

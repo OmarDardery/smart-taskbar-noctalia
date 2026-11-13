@@ -10,9 +10,9 @@
 
 Smart Taskbar is one API 52+ Luau bar widget with stable collapsed extent, grouped numeric counts, supported hover expansion, click/always modes, and a bounded 420-logical-pixel default expanded extent. Overflow uses a clipped virtualized icon strip with wheel navigation and focus reveal. Umbriel is the primary adapter; niri receives events natively and uses its CLI on explicit focus/close actions.
 
-Empty states hide the entire widget. Single-window apps have no count marker or placeholder lane; duplicates show numeric corner badges only. Optional hover enlargement uses paint transforms in fixed cells, and settings are grouped through a native conditional page selector.
+Empty states hide the entire widget. Single-window apps have no count marker or placeholder lane; duplicates show numeric corner badges only. Optional hover enlargement uses paint transforms in fixed cells, and all settings are visible together in the main Widget editor, with related fields adjacent and no page selector.
 
-Manual drag ordering stays within the widget and is in-memory. In manual mode expansion stays open until explicitly clicked because the public API lacks drag-start/end callbacks. Right click opens settings because native context menus are panel-only. Pin lists are settings-driven because configuration is read-only. Version 0.1.2 supports Umbriel on API 52/53 through its public CLI event stream; API 54+ uses native subscriptions. The host’s API range is authoritative.
+Manual drag ordering stays within the widget and is in-memory. In manual mode expansion stays open until explicitly clicked because the public API lacks drag-start/end callbacks. Right click opens settings because native context menus are panel-only. Pin lists are settings-driven because configuration is read-only. Version 0.1.3 supports Umbriel on API 52/53 through its public CLI event stream; API 54+ uses native subscriptions. The host’s API range is authoritative.
 
 **Desktop acceptance remains pending.** The cloud environment has no Noctalia/compositor executable/session. Native installation, compositor actions, screenshots, device gestures, scaling and resource measurements are pending. The visual assets are clearly labeled offline fixture previews, not live screenshots.
 

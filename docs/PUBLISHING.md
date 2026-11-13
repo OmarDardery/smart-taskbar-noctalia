@@ -1,6 +1,6 @@
 # Distribution and publication status
 
-Version **0.1.2 preview**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **52**.
+Version **0.1.3 preview**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **52**.
 
 The publisher created the public source repository [OmarDardery/smart-taskbar-noctalia](https://github.com/OmarDardery/smart-taskbar-noctalia) and [community fork](https://github.com/OmarDardery/community-plugins). The repository name differs from the canonical plugin ID; the plugin directory remains `smart-taskbar/`, as required by Noctalia.
 
@@ -46,3 +46,5 @@ Version 0.1.2 adds hide-on-empty, numeric-only duplicate badges without placehol
 Version [0.1.2](https://github.com/OmarDardery/smart-taskbar-noctalia/releases/tag/v0.1.2) and the updated PR branch are published. Source [CI run 43502864159](https://github.com/OmarDardery/smart-taskbar-noctalia/actions/runs/43502864159) passed compilation, all 45 Luau tests, the shell-stream test, package checks, and canonical validation. Community [validation run 43502880213](https://github.com/noctalia-dev/community-plugins/actions/runs/43502880213) passed. An independent checkout also passed package checks.
 
 Updating PR #1434's title/body and marking it ready were both attempted after validation. GitHub rejected the metadata update with HTTP 403 and the ready mutation with `FORBIDDEN: Resource not accessible by integration`. The PR remains draft. This is an upstream GitHub integration permission restriction, not an automatic approval-review rejection. Its ready-state checker also requires at least one recorded compositor test; no missing desktop result was checked as passed. The updated prepared body remains in `docs/community-pr.md` for the publisher to apply manually.
+
+Version 0.1.3 removes the settings selector and makes all plugin controls visible together in the host Widget section. Separate native sections cannot be declared by the current plugin manifest API; the missing group/section capability is documented in `upstream-settings-sections-request.md`.
