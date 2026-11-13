@@ -1,0 +1,4 @@
+.venv/
+test-results/
+test-output.txt
+__pycache__/

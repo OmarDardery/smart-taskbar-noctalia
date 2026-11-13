@@ -1,0 +1,25 @@
+name: Validate Smart Taskbar
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Official community validation
+        uses: noctalia-dev/official-plugins/.github/actions/validate-plugins@99a892dc9cb3490634412701c45acd024fe0383b
+        with:
+          profile: community
+          root: ${{ github.workspace }}
+      - name: Build official Luau CLI
+        run: |
+          git init /tmp/luau
+          git -C /tmp/luau fetch --depth 1 https://github.com/luau-lang/luau.git f46d879e28302a430029304f7f6a162aed66f103
+          git -C /tmp/luau checkout --detach FETCH_HEAD
+          make -C /tmp/luau config=release luau luau-compile -j2
+      - name: Source compilation and executable fixture tests
+        run: |
+          /tmp/luau/luau-compile --null smart-taskbar/widget.luau smart-taskbar/lib/model.luau smart-taskbar/lib/compositor.luau
+          LUAU=/tmp/luau/luau python3 tests/run.py
+          python3 scripts/check.py
