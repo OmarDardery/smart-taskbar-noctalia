@@ -29,3 +29,5 @@ noctalia msg plugins enable omardardery/smart-taskbar
 ```
 
 Add `omardardery/smart-taskbar:taskbar` in Bar settings. Native enabling and desktop behavior still require live acceptance testing. See the plugin README for width-budget setup and compatibility details.
+
+Community submission: [draft PR #1434](https://github.com/noctalia-dev/community-plugins/pull/1434). Automated checks pass; live desktop acceptance remains pending.
