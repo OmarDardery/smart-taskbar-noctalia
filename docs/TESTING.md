@@ -61,7 +61,7 @@ python3 -m venv /tmp/smart-taskbar-validator/.venv
 /tmp/smart-taskbar-validator/.venv/bin/python /tmp/smart-taskbar-validator/.github/actions/validate-plugins/validate-plugins.py --profile community --root "$PWD"
 ```
 
-The included GitHub Actions workflow runs manifest validation, compilation, fixture tests and package checks after publication. It has not run remotely yet.
+The included GitHub Actions workflow runs manifest validation, compilation, fixture tests and package checks after publication. The initial remote run exposed a pip cache-path failure in the upstream composite action. The workflow now runs the same pinned canonical validator directly, without that cache wrapper.
 
 ## Required desktop acceptance before production
 

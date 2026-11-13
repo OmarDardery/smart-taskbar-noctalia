@@ -7,11 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Official community validation
-        uses: noctalia-dev/official-plugins/.github/actions/validate-plugins@99a892dc9cb3490634412701c45acd024fe0383b
+      - uses: actions/setup-python@v7
         with:
-          profile: community
-          root: ${{ github.workspace }}
+          python-version: '3.14'
+      - name: Official community validation
+        run: |
+          git init /tmp/smart-taskbar-validator
+          git -C /tmp/smart-taskbar-validator fetch --depth 1 https://github.com/noctalia-dev/official-plugins.git 99a892dc9cb3490634412701c45acd024fe0383b
+          git -C /tmp/smart-taskbar-validator checkout --detach FETCH_HEAD
+          validator=/tmp/smart-taskbar-validator/.github/actions/validate-plugins
+          python3 -m pip install -r "$validator/requirements.txt"
+          python3 -m unittest discover -s "$validator" -p test_validate_plugins.py
+          python3 "$validator/validate-plugins.py" --profile community --root "$GITHUB_WORKSPACE"
       - name: Build official Luau CLI
         run: |
           git init /tmp/luau
