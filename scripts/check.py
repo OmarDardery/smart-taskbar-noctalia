@@ -15,6 +15,9 @@ assert len(manifest['widget']) == 1
 assert not any(key in manifest for key in ('service', 'panel', 'layer'))
 translations = json.loads((plugin/'translations/en.json').read_text())
 for setting in manifest['widget'][0]['setting']:
+    if setting['key'] != 'settings_page':
+        assert setting['visible_when']['key'] == 'settings_page'
+        assert len(setting['visible_when']['values']) == 1
     value = setting['default']
     if setting['type'] in ('int','double'):
         assert setting['min'] <= value <= setting['max']
@@ -25,6 +28,7 @@ for setting in manifest['widget'][0]['setting']:
         for segment in setting[key].split('.'):
             node = node[segment]
         assert isinstance(node,str) and node
+        if key == "label_key": assert ":" not in node
 for entry in plugin.rglob('*.luau'):
     text = entry.read_text()
     assert text.startswith('--!nonstrict')

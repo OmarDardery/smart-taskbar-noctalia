@@ -21,7 +21,7 @@ References were read before implementation on 2026-11-13:
 | Item hover | Public `ui.row/column` `onHover`, string `"true"` / `"false"`; tracks action target and combines nested hover transitions without polling |
 | Capsule accordion | Supported for host groups with multiple widgets; unnecessary with native whole-widget hover |
 | Delays | Host update interval temporarily armed for pending deadlines, no pointer polling |
-| Animation | Brief content fade via update interval; no bar frame-tick API. No width interpolation or perpetual loop |
+| Animation | Brief fade and optional paint-only icon scaling through the update interval; no bar frame-tick API, width changes, or perpetual loop |
 | Clipping | Explicit main-axis root/viewport dimensions and `clip = true`, API 52 |
 | Overflow | Discrete visible subset with whole-detent global `onScroll`; no unsupported `ui.scroll` |
 | Drag order | Public `ui.dragSource/dropZone`, API 38; only in-widget model order, not compositor layout |
@@ -35,6 +35,9 @@ References were read before implementation on 2026-11-13:
 | Pin/unpin | Settings API is read-only. Pin lists are edited in normal widget settings |
 | Middle click | Host default settings action retained; users must explicitly free the gesture before optional close/minimize callbacks |
 | Workspace grouping | Representative app icon for workspace groups; window counts cover the full group |
+| Settings pages | A manifest select field plus `visible_when` groups related controls without category-prefixed labels or unsupported sections |
+| Empty state | `barWidget.setVisible(false)` hides the whole widget, while the event subscription stays active |
+| Count badges | Numeric only, for counts above one; paint transforms overlay the icon corner without a layout lane |
 | Manual persistence | In-memory per instance; no undocumented settings write or state file |
 
 Version 0.1.1 requires API 52 for public container clipping. Native API 54 subscriptions are optional and used only after feature detection. On API 52/53, Umbriel events use its documented CLI through `runStream`, an existing public plugin API. Match the host’s reported API range instead of assuming every build with the same version label exposes identical capabilities. The user reported Noctalia v5.4.1 (`b096daa`) with API range 3–53; the published upstream v5.4.1 tag fetched separately reports an earlier API ceiling, so this compatibility claim is explicitly based on API level rather than all v5.4.1 packages.
@@ -45,7 +48,7 @@ Umbriel is implemented using window/workspace snapshots and typed native actions
 
 On API 54+, niri is implemented with native `WindowsChanged`, `WindowOpenedOrChanged`, `WindowClosed`, `WindowFocusChanged`, `WorkspacesChanged`, and `WorkspaceActivated` events. Focus and close use `niri msg action ... --id`. Minimize is unavailable. Compositor integration has fixture coverage only.
 
-Hyprland subscriptions are available, but provide string deltas and no initial snapshot or native plugin action method. Correct support needs an asynchronous, coalesced `hyprctl -j clients` / workspace snapshot reconciler, including reconnect races and address validation. This release deliberately declines that backend; it does not spawn repeated commands or pretend the normalized Umbriel schema applies to Hyprland. Sway/Mango/labwc/KDE subscriptions are not exposed by API 54 and also degrade to a placeholder.
+Hyprland subscriptions are available, but provide string deltas and no initial snapshot or native plugin action method. Correct support needs an asynchronous, coalesced `hyprctl -j clients` / workspace snapshot reconciler, including reconnect races and address validation. This release deliberately declines that backend; it does not spawn repeated commands or pretend the normalized Umbriel schema applies to Hyprland. Sway/Mango/labwc/KDE subscriptions are not exposed by API 54 and also stay hidden.
 
 ## Missing capability
 
@@ -59,4 +62,6 @@ The public [Umbriel IPC documentation](https://github.com/noctalia-dev/umbriel/b
 
 Noctalia’s process implementation creates a process group and cancels the group on `runStream` teardown. Because there is no individual public stream-stop method, compatibility-setting toggles detach delivery while retaining one connection and the latest full snapshots until reload/disable. Resuming replays snapshots without creating another stream. Host teardown owns shell, CLI and sleep cleanup. The real-pipe integration test verifies equivalent process-group termination with a fake CLI; actual Noctalia teardown still needs desktop acceptance.
 
-The fallback never touches `noctalia.compositor` methods when the namespace is absent. On API 52/53, niri and other compositors remain placeholders; this release does not invent a native action or event method for them.
+The fallback never touches `noctalia.compositor` methods when the namespace is absent. On API 52/53, niri and other compositors remain hidden; this release does not invent a native action or event method for them.
+
+Version 0.1.2 adds optional hover magnification using public API 52 paint transforms. Cells reserve the maximum icon size, root extents remain bounded, and animation ends without an idle frame loop. Empty filtered results (including pin-only results with no matching running windows) hide the entire widget.

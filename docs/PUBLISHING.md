@@ -1,6 +1,6 @@
 # Distribution and publication status
 
-Version **0.1.1 preview**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **52**.
+Version **0.1.2 preview**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **52**.
 
 The publisher created the public source repository [OmarDardery/smart-taskbar-noctalia](https://github.com/OmarDardery/smart-taskbar-noctalia) and [community fork](https://github.com/OmarDardery/community-plugins). The repository name differs from the canonical plugin ID; the plugin directory remains `smart-taskbar/`, as required by Noctalia.
 
@@ -38,3 +38,5 @@ The PR description was filled in, but upstream enforcement flagged three shorten
 The user’s desktop reports API range 3–53. Version 0.1.1 lowers the minimum to API 52 by adding a public Umbriel CLI event transport; API 54 native subscriptions remain optional. The code has 34 passing Luau fixture tests and one passing real-pipe/process-group test with a fake CLI. Actual desktop execution remains pending. Both the custom source and existing community PR branch carry the update; no new PR is required.
 
 The upstream PR title/body may still mention API 54 until edited manually. Use the updated prepared body in `docs/community-pr.md` and title **Add Smart Taskbar application switcher (API 52 preview)** when updating its metadata. Keep it draft.
+
+Version 0.1.2 adds hide-on-empty, numeric-only duplicate badges without placeholder lanes, native conditional settings pages, and optional bounded icon magnification. The user requested making PR #1434 ready for review after pushing. The transition is attempted without converting unrun desktop checks into passed tests; the upstream ready-state bot requires a checked compositor test.

@@ -75,7 +75,13 @@ def paint(image, node, x, y):
         d.text((w*SCALE/2,h*SCALE/2),symbols.get(p.get('name'),'□'),anchor='mm',font=font(p.get('size',14)),fill=color(p.get('color')))
     opacity = p.get('opacity',1)
     if opacity < 1: layer.putalpha(layer.getchannel('A').point(lambda v: round(v*opacity)))
-    image.alpha_composite(layer,(round(x*SCALE),round(y*SCALE)))
+    scale = p.get('scale', 1)
+    if scale != 1:
+        new_size = (max(1, round(layer.width*scale)), max(1, round(layer.height*scale)))
+        x -= (new_size[0]-layer.width)/(2*SCALE)
+        y -= (new_size[1]-layer.height)/(2*SCALE)
+        layer = layer.resize(new_size, Image.Resampling.LANCZOS)
+    image.alpha_composite(layer,(round((x+p.get('translateX',0))*SCALE),round((y+p.get('translateY',0))*SCALE)))
 
 snapshots = json.loads((ROOT/'test-results/trees.json').read_text())
 for snapshot in snapshots:

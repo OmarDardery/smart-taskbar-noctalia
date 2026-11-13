@@ -1,6 +1,7 @@
 --!nonstrict
 local now, tree, renders, interval = 0, nil, 0, 0
 local eventCallback, actions, notices, calls = nil, {}, {}, {}
+local widgetVisible = true
 local vertical, output, resolverCalls = false, "DP-1", 0
 local settings = table.clone(defaults)
 local translations = {
@@ -52,6 +53,7 @@ local noctalia = {
   end },
 }
 local barWidget = {
+  setVisible = function(value) widgetVisible = value end,
   isVertical = function() return vertical end,
   outputName = function() return output end,
   render = function(value) tree = value; renders += 1 end,

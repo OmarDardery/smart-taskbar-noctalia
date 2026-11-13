@@ -4,8 +4,8 @@ Executed on 2026-11-13 in the attached Linux cloud environment.
 
 ## Checks that actually ran
 
-- **34 executable Luau fixture tests passed** (24 existing scenarios plus 10 API 52/53 compatibility tests). The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
-- **2,275 layout combinations** exercised within the width test: maximum extents 48–496 by 7, icon sizes 12–48 by 6, and counts 0/1/5/16/100. Includes cross-field minimum width exceeding maximum width. Every computed root extent stayed within its maximum; capacity never became zero.
+- **45 executable Luau fixture tests passed** (35 widget scenarios plus 10 API 52/53 compatibility tests). The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
+- **9,100 layout combinations** exercised within the width test: maximum extents 48–496 by 7, icon sizes 12–48 by 6, counts 0/1/5/16/100, and hover scales 1/1.05/1.15/1.5. Includes cross-field minimum width exceeding maximum width. Every computed root extent stayed within its maximum; capacity never became zero.
 - Default side-bar tree width fits the standard 34-pixel bar; vertical main-axis extent is bounded. This is a tree assertion, not a rendered DPI check.
 - **Official community manifest validation passed**, using exact community-pinned validator commit `99a892dc9cb3490634412701c45acd024fe0383b`.
 - **All 178 tests of that official validator passed.** Those tests validate the validator, not Smart Taskbar's desktop behavior.
@@ -21,7 +21,7 @@ Executed on 2026-11-13 in the attached Linux cloud environment.
 
 | Requested scenario | Executed evidence | Live desktop status |
 | --- | --- | --- |
-| Zero open applications | Placeholder and fixed collapsed extent | Not run |
+| Zero open applications | Entire widget hidden with zero children; first-window event restores it | Not run |
 | One focused application | Focus state, hover delay, collapsed/expanded trees | Not run |
 | Distinct running applications | 20-app fixture | Not run |
 | Five windows of one app | One group, exact count 5, cycle to second window | Not run |
@@ -74,4 +74,6 @@ Repeat on top, bottom, left and right bars, then at 100%, 160%, and mixed monito
 
 Use the Noctalia build's `noctalia plugins lint` help for the current lint invocation and run its config validator against the installed configuration. Measure idle CPU/RSS and focus-to-highlight latency with the actual shell; investigate warnings rather than suppressing them. Mark each desktop row only after recording its result. Keep the community PR draft until these checks and real screenshots are complete.
 
-Version 0.1.1 is intended for the user-reported API 3–53 desktop and declares minimum API 52. It has no direct native-desktop test result yet. The original 0.1.0 API 54 compatibility gate was confirmed to prevent enabling there; this update replaces that event-transport requirement with a tested public CLI fallback.
+Version 0.1.2 is intended for the user-reported API 3–53 desktop and declares minimum API 52. It has no direct native-desktop test result yet. The original 0.1.0 API 54 compatibility gate was confirmed to prevent enabling there; this update replaces that event-transport requirement with a tested public CLI fallback.
+
+Version 0.1.2 regression coverage includes last-window hiding/recovery, filtered and pin-only empty states, no singleton count/placeholder node, numeric corner badges, bounded hover scaling without repeated icon lookup, reduced motion, side-bar magnification, collapsed duplicate counts, animation cancellation while hidden, and settings-page changes without redraw/cache invalidation. Grouped settings labels and `visible_when` page membership are checked from the manifest. These tests do not establish native desktop acceptance.
