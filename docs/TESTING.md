@@ -77,3 +77,5 @@ Use the Noctalia build's `noctalia plugins lint` help for the current lint invoc
 Version 0.1.2 is intended for the user-reported API 3–53 desktop and declares minimum API 52. It has no direct native-desktop test result yet. The original 0.1.0 API 54 compatibility gate was confirmed to prevent enabling there; this update replaces that event-transport requirement with a tested public CLI fallback.
 
 Version 0.1.2 regression coverage includes last-window hiding/recovery, filtered and pin-only empty states, no singleton count/placeholder node, numeric corner badges, bounded hover scaling without repeated icon lookup, reduced motion, side-bar magnification, collapsed duplicate counts, animation cancellation while hidden, and settings-page changes without redraw/cache invalidation. Grouped settings labels and `visible_when` page membership are checked from the manifest. These tests do not establish native desktop acceptance.
+
+Release 0.1.2 source CI run `43502864159` and community validation run `43502880213` passed on GitHub. Native desktop acceptance is still separate from these automated results.

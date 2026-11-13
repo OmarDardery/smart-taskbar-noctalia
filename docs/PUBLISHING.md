@@ -40,3 +40,9 @@ The user’s desktop reports API range 3–53. Version 0.1.1 lowers the minimum 
 The upstream PR title/body may still mention API 54 until edited manually. Use the updated prepared body in `docs/community-pr.md` and title **Add Smart Taskbar application switcher (API 52 preview)** when updating its metadata. Keep it draft.
 
 Version 0.1.2 adds hide-on-empty, numeric-only duplicate badges without placeholder lanes, native conditional settings pages, and optional bounded icon magnification. The user requested making PR #1434 ready for review after pushing. The transition is attempted without converting unrun desktop checks into passed tests; the upstream ready-state bot requires a checked compositor test.
+
+### 0.1.2 publication result
+
+Version [0.1.2](https://github.com/OmarDardery/smart-taskbar-noctalia/releases/tag/v0.1.2) and the updated PR branch are published. Source [CI run 43502864159](https://github.com/OmarDardery/smart-taskbar-noctalia/actions/runs/43502864159) passed compilation, all 45 Luau tests, the shell-stream test, package checks, and canonical validation. Community [validation run 43502880213](https://github.com/noctalia-dev/community-plugins/actions/runs/43502880213) passed. An independent checkout also passed package checks.
+
+Updating PR #1434's title/body and marking it ready were both attempted after validation. GitHub rejected the metadata update with HTTP 403 and the ready mutation with `FORBIDDEN: Resource not accessible by integration`. The PR remains draft. This is an upstream GitHub integration permission restriction, not an automatic approval-review rejection. Its ready-state checker also requires at least one recorded compositor test; no missing desktop result was checked as passed. The updated prepared body remains in `docs/community-pr.md` for the publisher to apply manually.
