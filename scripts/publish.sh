@@ -22,7 +22,7 @@ else
   fi
   git push -u origin main
 fi
-git push origin v0.1.0
+git push origin v0.1.1
 if ! gh repo view OmarDardery/community-plugins >/dev/null 2>&1; then
   gh repo fork noctalia-dev/community-plugins --clone=false
 fi
@@ -40,5 +40,5 @@ cp -R "$root/smart-taskbar" "$submission_dir/community/smart-taskbar"
 git -C "$submission_dir/community" add smart-taskbar
 git -C "$submission_dir/community" commit -m 'Add Smart Taskbar application switcher'
 git -C "$submission_dir/community" push -u origin add-smart-taskbar
-gh pr create --repo noctalia-dev/community-plugins --base main --head OmarDardery:add-smart-taskbar --draft --title 'Add Smart Taskbar application switcher (API 54 preview)' --body-file "$root/docs/community-pr.md"
+gh pr create --repo noctalia-dev/community-plugins --base main --head OmarDardery:add-smart-taskbar --draft --title 'Add Smart Taskbar application switcher (API 52 preview)' --body-file "$root/docs/community-pr.md"
 gh issue create --repo noctalia-dev/noctalia --title '[FEATURE] Public continuous scroll viewport for declarative bar widgets' --body-file "$root/docs/upstream-scroll-request.md"

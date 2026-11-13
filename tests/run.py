@@ -21,18 +21,21 @@ def lua(value):
         return 'true' if value else 'false'
     return json.dumps(value, ensure_ascii=False)
 
-def main():
+def run_suite(fallback=False):
     manifest = tomllib.loads((PLUGIN / 'plugin.toml').read_text())
     defaults = {s['key']: s['default'] for s in manifest['widget'][0]['setting']}
     source = 'local defaults = ' + lua(defaults) + '\n'
     source += (ROOT / 'tests/host.luau').read_text() + '\n'
-    for name in ('model', 'compositor'):
+    if fallback:
+        source += (ROOT / 'tests/fallback-host.luau').read_text() + '\n'
+    for name in ('model', 'compositor', 'transport'):
         source += 'local module_' + name + ' = (function()\n'
         source += (PLUGIN / 'lib' / (name + '.luau')).read_text() + '\nend)()\n'
     widget = (PLUGIN / 'widget.luau').read_text()
     widget = widget.replace('require("./lib/model.luau")', 'module_model')
     widget = widget.replace('require("./lib/compositor.luau")', 'module_compositor')
-    source += widget + '\n' + (ROOT / 'tests/spec.luau').read_text()
+    widget = widget.replace('require("./lib/transport.luau")', 'module_transport')
+    source += widget + '\n' + (ROOT / ('tests/fallback-spec.luau' if fallback else 'tests/spec.luau')).read_text()
     with tempfile.TemporaryDirectory() as temp:
         entry = Path(temp) / 'suite.luau'
         entry.write_text(source)
@@ -49,4 +52,5 @@ def main():
             (output / 'trees.json').write_text(json.dumps(snapshots, indent=2))
 
 if __name__ == '__main__':
-    main()
+    run_suite()
+    run_suite(fallback=True)

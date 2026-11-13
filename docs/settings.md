@@ -40,4 +40,4 @@
 | `middle_click` | `"settings"` | Host defaults to widget settings. To use these actions, explicitly set this instance’s actions.middle = "none". |
 | `refresh_fallback` | `60` | Seconds between idle subscription retries if a supported compositor could not subscribe. No subprocess polling. |
 | `diagnostic_logging` | `false` | Log subscription and action errors. Window titles are not logged. |
-| `compositor_compatibility` | `"auto"` | Unsupported compositors show a placeholder. API 54 is required even in automatic mode. |
+| `compositor_compatibility` | `"auto"` | Unsupported compositors show a placeholder. Umbriel supports API 52+. niri requires API 54 for native events. |

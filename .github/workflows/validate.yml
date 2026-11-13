@@ -27,6 +27,7 @@ jobs:
           make -C /tmp/luau config=release luau luau-compile -j2
       - name: Source compilation and executable fixture tests
         run: |
-          /tmp/luau/luau-compile --null smart-taskbar/widget.luau smart-taskbar/lib/model.luau smart-taskbar/lib/compositor.luau
+          /tmp/luau/luau-compile --null smart-taskbar/widget.luau smart-taskbar/lib/model.luau smart-taskbar/lib/compositor.luau smart-taskbar/lib/transport.luau
           LUAU=/tmp/luau/luau python3 tests/run.py
+          python3 tests/stream_test.py
           python3 scripts/check.py

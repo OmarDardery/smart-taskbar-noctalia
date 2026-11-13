@@ -29,7 +29,7 @@ References were read before implementation on 2026-11-13:
 | Palette | Public theme roles including containers, API 43; the host repaints on palette changes |
 | Icons | Cached public `appIconPath`, including host desktop matching; no icon subprocesses |
 | Umbriel actions | `noctalia.umbriel.action`, API 45, `window-focus`, `window-close`, `window-minimize` as used by Noctalia's Umbriel backend |
-| Events | `noctalia.compositor.subscribe/unsubscribe/name`, API 54; raw Umbriel and niri schemas |
+| Events | API 54 native subscriptions when available; API 52/53 Umbriel uses public `runStream` and `umbriel subscribe windows workspaces` |
 | niri actions | CLI argument arrays only on user action; no native niri action method exposed to plugins |
 | Context menu | `panel.openContextMenu` is panel-only; no extra panel added for this single-widget release |
 | Pin/unpin | Settings API is read-only. Pin lists are edited in normal widget settings |
@@ -37,16 +37,26 @@ References were read before implementation on 2026-11-13:
 | Workspace grouping | Representative app icon for workspace groups; window counts cover the full group |
 | Manual persistence | In-memory per instance; no undocumented settings write or state file |
 
-The newest capability actually used is API 54, so `plugin_api = 54` is necessary. The official versions page labels API 44–54 unreleased. A generic “v5+ compatible” claim would be misleading; older stable releases cannot enable this plugin. There is no invented lower-API fallback.
+Version 0.1.1 requires API 52 for public container clipping. Native API 54 subscriptions are optional and used only after feature detection. On API 52/53, Umbriel events use its documented CLI through `runStream`, an existing public plugin API. Match the host’s reported API range instead of assuming every build with the same version label exposes identical capabilities. The user reported Noctalia v5.4.1 (`b096daa`) with API range 3–53; the published upstream v5.4.1 tag fetched separately reports an earlier API ceiling, so this compatibility claim is explicitly based on API level rather than all v5.4.1 packages.
 
 ## Compositor evaluation
 
 Umbriel is implemented using window/workspace snapshots and typed native actions. Core `umbriel_workspace_backend.cpp` provides the reference field/action names; the plugin does not call the C++ backend or other private interfaces. Workspace-to-output mapping prefers workspace snapshot output and falls back to Umbriel's connector-prefixed workspace IDs. Scratchpads without a workspace are hidden, following the core taskbar.
 
-niri is implemented with native `WindowsChanged`, `WindowOpenedOrChanged`, `WindowClosed`, `WindowFocusChanged`, `WorkspacesChanged`, and `WorkspaceActivated` events. Focus and close use `niri msg action ... --id`. Minimize is unavailable. Compositor integration has fixture coverage only.
+On API 54+, niri is implemented with native `WindowsChanged`, `WindowOpenedOrChanged`, `WindowClosed`, `WindowFocusChanged`, `WorkspacesChanged`, and `WorkspaceActivated` events. Focus and close use `niri msg action ... --id`. Minimize is unavailable. Compositor integration has fixture coverage only.
 
 Hyprland subscriptions are available, but provide string deltas and no initial snapshot or native plugin action method. Correct support needs an asynchronous, coalesced `hyprctl -j clients` / workspace snapshot reconciler, including reconnect races and address validation. This release deliberately declines that backend; it does not spawn repeated commands or pretend the normalized Umbriel schema applies to Hyprland. Sway/Mango/labwc/KDE subscriptions are not exposed by API 54 and also degrade to a placeholder.
 
 ## Missing capability
 
 Continuous pointer scrolling requires a native bar-compatible scroll viewport or continuous delta/offset API. Paint transforms and clipping alone do not provide native inertia or reliable pixel scrolling. The focused upstream request is prepared in [upstream-scroll-request.md](upstream-scroll-request.md). GitHub rejected issue creation with HTTP 403, so it has not been filed.
+
+## API 52/53 Umbriel transport
+
+The public [Umbriel IPC documentation](https://github.com/noctalia-dev/umbriel/blob/main/docs/user/ipc.md), reviewed at commit `33a782dc750e78f0ef2d21fd9d3df33229ae06f9`, specifies full snapshot subscriptions with initial state. Its CLI `umbriel subscribe windows workspaces` forwards newline-delimited event envelopes and explicitly flushes stdout after each line. `src/cli/ipc_client.cpp` and `src/main.cpp` confirm framing and command arguments.
+
+`lib/transport.luau` uses one constant, non-interpolated shell program through public `runStream`. The shell runs the subscription, emits reset envelopes before/after connections, and waits two seconds before reconnecting after disconnection. A healthy stream performs no window queries and has no periodic subprocess work. No helper daemon or additional scripting runtime is needed; dependencies are the existing `umbriel` CLI and standard `sleep` utility. Native window actions remain `noctalia.umbriel.action` (API 45).
+
+Noctalia’s process implementation creates a process group and cancels the group on `runStream` teardown. Because there is no individual public stream-stop method, compatibility-setting toggles detach delivery while retaining one connection and the latest full snapshots until reload/disable. Resuming replays snapshots without creating another stream. Host teardown owns shell, CLI and sleep cleanup. The real-pipe integration test verifies equivalent process-group termination with a fake CLI; actual Noctalia teardown still needs desktop acceptance.
+
+The fallback never touches `noctalia.compositor` methods when the namespace is absent. On API 52/53, niri and other compositors remain placeholders; this release does not invent a native action or event method for them.

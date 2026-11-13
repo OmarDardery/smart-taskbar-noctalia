@@ -8,15 +8,15 @@
 
 ## What it does
 
-Smart Taskbar is one API 54 Luau bar widget with stable collapsed extent, grouped numeric counts, native whole-widget hover expansion, click/always modes, and a bounded 420-logical-pixel default expanded extent. Overflow uses a clipped virtualized icon strip with wheel navigation and focus reveal. Umbriel is the primary adapter; niri receives events natively and uses its CLI on explicit focus/close actions.
+Smart Taskbar is one API 52+ Luau bar widget with stable collapsed extent, grouped numeric counts, supported hover expansion, click/always modes, and a bounded 420-logical-pixel default expanded extent. Overflow uses a clipped virtualized icon strip with wheel navigation and focus reveal. Umbriel is the primary adapter; niri receives events natively and uses its CLI on explicit focus/close actions.
 
-Manual drag ordering stays within the widget and is in-memory. In manual mode expansion stays open until explicitly clicked because the public API lacks drag-start/end callbacks. Right click opens settings because native context menus are panel-only. Pin lists are settings-driven because configuration is read-only. Stable v5.4.1 is not supported: API 54 is documented as unreleased.
+Manual drag ordering stays within the widget and is in-memory. In manual mode expansion stays open until explicitly clicked because the public API lacks drag-start/end callbacks. Right click opens settings because native context menus are panel-only. Pin lists are settings-driven because configuration is read-only. Version 0.1.1 supports Umbriel on API 52/53 through its public CLI event stream; API 54+ uses native subscriptions. The host’s API range is authoritative.
 
 **Keep this PR draft.** The cloud environment has no Noctalia/compositor executable/session. Native installation, compositor actions, screenshots, device gestures, scaling and resource measurements are pending. The visual assets are clearly labeled offline fixture previews, not live screenshots.
 
 ## External dependencies
 
-Manifest dependencies: `gtk-launch` (only explicit pinned desktop launches) and `niri` (only niri focus/close actions). Commands use argument arrays. Umbriel actions and all event subscriptions use the host API. No subprocess polling, daemon, database, or state file.
+Manifest dependencies: `umbriel` and `sleep` (one reconnecting host-managed CLI event stream on API 52/53), `gtk-launch` (only explicit pinned desktop launches) and `niri` (only niri focus/close actions). Commands use argument arrays. Umbriel window actions use the host API; subscriptions prefer native API 54 and use `runStream` on API 52/53. No subprocess polling, daemon, database, or state file. The single host-owned shell/CLI stream reconnects after two seconds on disconnection; Noctalia cancels its process group on reload/disable.
 
 Network calls: none. Filesystem writes: none. Host icon lookup reads icon/desktop-entry files through `appIconPath`. Window titles are displayed locally and never logged. No downloaded code executes at plugin runtime.
 
@@ -27,9 +27,9 @@ Network calls: none. Filesystem writes: none. Host icon lookup reads icon/deskto
 - [ ] Tested on Sway
 - [ ] Tested on another compositor: Umbriel live session pending
 - **Noctalia version tested against:** no running shell; source/API reviewed at core commit `42581ce5d3599be9cf54e971607c2d3ae43525fe`
-- **Plugin API level:** 54
+- **Plugin API level:** 52
 
-24 Luau fixture tests pass, including 2,275 width combinations, five-window badge/cycling, twenty-app overflow, focus reveal, filters, aliases, pinned running windows, drag reorder, safe actions, setting changes and reset recovery. All three sources compile with `luau-compile`. Canonical community manifest validation passes at the exact community-pinned validator `99a892dc9cb3490634412701c45acd024fe0383b`, whose 178 tests also pass. These tests do not establish desktop acceptance.
+34 Luau fixture tests pass, including 2,275 width combinations, five-window badge/cycling, twenty-app overflow, focus reveal, filters, aliases, pinned running windows, drag reorder, safe actions, setting changes and reset recovery. All four sources compile with `luau-compile`. Canonical community manifest validation passes at the exact community-pinned validator `99a892dc9cb3490634412701c45acd024fe0383b`, whose 178 tests also pass. A real-pipe shell integration test verifies snapshot framing, disconnect reset, reconnect, and process-group cleanup with a fake Umbriel CLI. Noctalia desktop acceptance remains pending.
 
 ## Screenshots / Videos
 

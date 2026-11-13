@@ -4,13 +4,15 @@ Executed on 2026-11-13 in the attached Linux cloud environment.
 
 ## Checks that actually ran
 
-- **24 executable Luau fixture tests passed.** The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
+- **34 executable Luau fixture tests passed** (24 existing scenarios plus 10 API 52/53 compatibility tests). The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
 - **2,275 layout combinations** exercised within the width test: maximum extents 48–496 by 7, icon sizes 12–48 by 6, and counts 0/1/5/16/100. Includes cross-field minimum width exceeding maximum width. Every computed root extent stayed within its maximum; capacity never became zero.
 - Default side-bar tree width fits the standard 34-pixel bar; vertical main-axis extent is bounded. This is a tree assertion, not a rendered DPI check.
 - **Official community manifest validation passed**, using exact community-pinned validator commit `99a892dc9cb3490634412701c45acd024fe0383b`.
 - **All 178 tests of that official validator passed.** Those tests validate the validator, not Smart Taskbar's desktop behavior.
-- All three shipped Luau files compiled with the official `luau-compile --null` command. Luau CLI commit: `f46d879e28302a430029304f7f6a162aed66f103`.
+- All four shipped Luau files compiled with the official `luau-compile --null` command. Luau CLI commit: `f46d879e28302a430029304f7f6a162aed66f103`.
 - Additional package checks verify custom catalog consistency, setting defaults/translations, the single-widget architecture, and required assets.
+- **One real-pipe shell integration test passed** with a fake Umbriel CLI: exact command arguments, JSON-line snapshot forwarding, reset on disconnect, two-second reconnect, no restarts while connected/idle, and child-process cleanup on process-group cancellation. This does not start a real compositor or Noctalia.
+- The API 52/53 harness runs the actual entry with `noctalia.compositor` absent, covering startup, grouped actions, malformed lines, reconnect resets, cached replay without duplicate streams, missing commands, idle updates, and exit callback detachment.
 - The fixture confirms 1,000 idle `update()` callbacks issue **zero renders and zero icon lookups**. This is not a CPU, memory, latency, or native idle-resource measurement.
 
 ## Acceptance matrix
@@ -46,7 +48,8 @@ Requires Python 3.11+ and the official Luau CLI:
 
 ```sh
 LUAU=/path/to/luau python3 tests/run.py
-/path/to/luau-compile --null smart-taskbar/widget.luau smart-taskbar/lib/model.luau smart-taskbar/lib/compositor.luau
+/path/to/luau-compile --null smart-taskbar/widget.luau smart-taskbar/lib/model.luau smart-taskbar/lib/compositor.luau smart-taskbar/lib/transport.luau
+python3 tests/stream_test.py
 python3 scripts/check.py
 ```
 
@@ -65,8 +68,10 @@ The included GitHub Actions workflow runs manifest validation, compilation, fixt
 
 ## Required desktop acceptance before production
 
-Use a Noctalia API 54 build and Umbriel. Install the local path source, enable the plugin, add `omardardery/smart-taskbar:taskbar`, and set bar/widget scale to 1, host capsule off, capsule padding 0, and no custom label/group wrapper. Create the windows listed above and confirm the native widget extent never exceeds 420 logical pixels. Record the exact Noctalia and compositor versions and capture actual screenshots of all four states.
+Use a Noctalia API 52+ build and Umbriel. Test both the CLI transport on API 52/53 and native subscriptions on API 54+. Install the local path source, enable the plugin, add `omardardery/smart-taskbar:taskbar`, and set bar/widget scale to 1, host capsule off, capsule padding 0, and no custom label/group wrapper. Create the windows listed above and confirm the native widget extent never exceeds 420 logical pixels. Record the exact Noctalia and compositor versions and capture actual screenshots of all four states.
 
 Repeat on top, bottom, left and right bars, then at 100%, 160%, and mixed monitor scaling. Check real icon loading, pointer movement across inline cells, hover delays, touchpad direction changes, menu/settings precedence, and dragging past widget boundaries. Change every settings category while running, reload the Luau module, restart the compositor, and restart Noctalia. Repeat focus/close on niri; verify its unavailable minimize action reports gracefully.
 
 Use the Noctalia build's `noctalia plugins lint` help for the current lint invocation and run its config validator against the installed configuration. Measure idle CPU/RSS and focus-to-highlight latency with the actual shell; investigate warnings rather than suppressing them. Mark each desktop row only after recording its result. Keep the community PR draft until these checks and real screenshots are complete.
+
+Version 0.1.1 is intended for the user-reported API 3–53 desktop and declares minimum API 52. It has no direct native-desktop test result yet. The original 0.1.0 API 54 compatibility gate was confirmed to prevent enabling there; this update replaces that event-transport requirement with a tested public CLI fallback.

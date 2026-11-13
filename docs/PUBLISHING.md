@@ -1,6 +1,6 @@
 # Distribution and publication status
 
-Version **0.1.0 preview**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **54**.
+Version **0.1.1 preview**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **52**.
 
 The publisher created the public source repository [OmarDardery/smart-taskbar-noctalia](https://github.com/OmarDardery/smart-taskbar-noctalia) and [community fork](https://github.com/OmarDardery/community-plugins). The repository name differs from the canonical plugin ID; the plugin directory remains `smart-taskbar/`, as required by Noctalia.
 
@@ -13,7 +13,7 @@ noctalia msg plugins enable omardardery/smart-taskbar
 
 Add `omardardery/smart-taskbar:taskbar` in Bar settings. Set host capsule off, capsule padding 0, bar and widget scale 1, and no custom label/group wrapper padding for a matching outer width budget.
 
-Source layout, catalog, manifest, source compilation and executable fixture tests have been validated. Real enabling/bar placement and the [desktop acceptance matrix](TESTING.md) require a Noctalia API 54 session and remain pending. Keep community submission draft until live testing and actual screenshots are complete. The committed previews are explicitly labeled offline fixtures.
+Source layout, catalog, manifest, source compilation and executable fixture tests have been validated. Real enabling/bar placement and the [desktop acceptance matrix](TESTING.md) require a Noctalia API 52+ Umbriel session and remain pending. Keep community submission draft until live testing and actual screenshots are complete. The committed previews are explicitly labeled offline fixtures.
 
 ## Submission
 
@@ -32,3 +32,9 @@ The PR description currently contains the unfilled GitHub template. Attempting t
 Upstream issue creation remains blocked; the focused scrolling request is prepared in [upstream-scroll-request.md](upstream-scroll-request.md). Live desktop acceptance and real screenshots remain pending.
 
 The PR description was filled in, but upstream enforcement flagged three shortened checklist items. The prepared body now preserves the exact upstream checklist wording and passes the upstream draft-description checker locally. The publisher must paste the corrected body because the integration cannot edit upstream PR metadata.
+
+## Version 0.1.1 compatibility update
+
+The user’s desktop reports API range 3–53. Version 0.1.1 lowers the minimum to API 52 by adding a public Umbriel CLI event transport; API 54 native subscriptions remain optional. The code has 34 passing Luau fixture tests and one passing real-pipe/process-group test with a fake CLI. Actual desktop execution remains pending. Both the custom source and existing community PR branch carry the update; no new PR is required.
+
+The upstream PR title/body may still mention API 54 until edited manually. Use the updated prepared body in `docs/community-pr.md` and title **Add Smart Taskbar application switcher (API 52 preview)** when updating its metadata. Keep it draft.
