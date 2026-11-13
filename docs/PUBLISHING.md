@@ -30,3 +30,5 @@ The publisher opened [community draft PR #1434](https://github.com/noctalia-dev/
 The PR description currently contains the unfilled GitHub template. Attempting to update it through the integration returned HTTP 403. The publisher must replace it manually with [the prepared description](community-pr.md), leaving live-compositor testing unchecked and keeping the PR draft. Source edits can still be pushed through the fork branch without recreating the PR.
 
 Upstream issue creation remains blocked; the focused scrolling request is prepared in [upstream-scroll-request.md](upstream-scroll-request.md). Live desktop acceptance and real screenshots remain pending.
+
+The PR description was filled in, but upstream enforcement flagged three shortened checklist items. The prepared body now preserves the exact upstream checklist wording and passes the upstream draft-description checker locally. The publisher must paste the corrected body because the integration cannot edit upstream PR metadata.

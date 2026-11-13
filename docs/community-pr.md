@@ -36,17 +36,27 @@ Network calls: none. Filesystem writes: none. Host icon lookup reads icon/deskto
 Offline fixture renders are committed in `smart-taskbar/screenshots/` and visibly identified. Real Noctalia collapsed, expanded, grouped, and overflow screenshots must replace these before production acceptance. The thumbnail was exported with the official thumbnail generator using the labeled offline overflow preview.
 
 ## Checklist
+**Ready-for-review requirement:** Every box in this section must be checked. If any statement is not true, keep the
+pull request as Draft. An explanation does not replace a required check.
+
+Manifest descriptions and all README prose must be English; no translated sections or localized README copies.
 
 - [x] The directory name matches the part of `id` after the `/` in `plugin.toml` exactly.
 - [x] It ships `plugin.toml`, `README.md`, `thumbnail.webp`, and `translations/en.json`.
-- [x] `README.md` follows the README template, documents every entry id and dependency, and includes exact panel IPC commands and launcher prefixes where applicable.
-- [x] `thumbnail.webp` is present and relevant; for a new plugin I created it with the thumbnail generator.
+- [x] `README.md` follows the
+      [README template](https://github.com/noctalia-dev/community-plugins/blob/main/README_TEMPLATE.md), documents
+      every entry id and dependency, and includes exact panel IPC commands and launcher prefixes where applicable.
+- [x] `thumbnail.webp` is present and relevant; for a new plugin I created it with the [thumbnail generator](https://assets.noctalia.dev/plugins/thumbnail-generator.html), and for an update I regenerated it with the generator if the visual identity or user-facing appearance changed.
 - [x] `version` follows semver and is bumped in this PR; `plugin_api` is the oldest API level this plugin requires.
-- [x] Every non-English translation in this PR uses a supported locale and is reviewed; no non-English translations are included.
-- [x] I did not edit `catalog.toml`; CI generates it. Only the plugin directory is submitted here; the separate custom source's catalog is excluded.
+- [x] Every non-English translation in this PR uses a locale supported by Noctalia core, and I can read, write, and
+      understand that language well enough to review and maintain it (no unreviewed machine/LLM translations).
+- [x] I did not edit `catalog.toml`; CI generates it.
 - [x] This PR touches exactly one plugin directory.
 
 ## Code review attestation
+
+Plugins run as trusted, unsandboxed Luau in the user's session. Confirm:
+**Ready-for-review requirement:** Every attestation below must be checked.
 
 - [x] The code is readable and not obfuscated, minified, or generated.
 - [x] Code identifiers and code comments are in English.
@@ -54,4 +64,4 @@ Offline fixture renders are committed in `smart-taskbar/screenshots/` and visibl
 - [x] Every network call, filesystem write, and spawned process is something the description above accounts for.
 - [x] I have the right to publish this code under the `license` declared in `plugin.toml`.
 
-The compositor testing requirement remains unchecked, so this submission must remain draft.
+The compositor testing requirement remains unchecked, so this submission must remain draft. No non-English translations are included.
