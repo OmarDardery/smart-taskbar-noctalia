@@ -18,3 +18,14 @@ LUAU=/path/to/luau python3 tests/run.py
 The tests execute the shipped Luau source with a deterministic host fixture. They do not start Noctalia or a compositor. Optional labeled offline previews can be regenerated with `python3 tests/preview.py` after installing Pillow in your development environment.
 
 The plugin itself needs no Python, browser, daemon, network access, or state files. See the plugin README for conditional CLI requirements.
+
+## Install the published preview
+
+Requires a Noctalia build supporting **plugin API 54**:
+
+```sh
+noctalia msg plugins source add smart-taskbar git https://github.com/OmarDardery/smart-taskbar-noctalia
+noctalia msg plugins enable omardardery/smart-taskbar
+```
+
+Add `omardardery/smart-taskbar:taskbar` in Bar settings. Native enabling and desktop behavior still require live acceptance testing. See the plugin README for width-budget setup and compatibility details.
