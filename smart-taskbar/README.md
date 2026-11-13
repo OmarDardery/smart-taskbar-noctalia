@@ -25,7 +25,7 @@ A compact, collapsible application switcher with grouped window counts, focused-
 Add the custom Git source and enable the plugin:
 
 ```sh
-noctalia msg plugins source add smart-taskbar git https://github.com/OmarDardery/smart-taskbar
+noctalia msg plugins source add smart-taskbar git https://github.com/OmarDardery/smart-taskbar-noctalia
 noctalia msg plugins enable omardardery/smart-taskbar
 ```
 

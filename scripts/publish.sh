@@ -9,14 +9,14 @@ if [[ "$login" != OmarDardery ]]; then
   echo 'This source declares OmarDardery as its publisher. Update the canonical ID and publication metadata before using another account.' >&2
   exit 1
 fi
-if ! gh repo view OmarDardery/smart-taskbar >/dev/null 2>&1; then
-  gh repo create OmarDardery/smart-taskbar --public --source "$root" --remote origin --push
+if ! gh repo view OmarDardery/smart-taskbar-noctalia >/dev/null 2>&1; then
+  gh repo create OmarDardery/smart-taskbar-noctalia --public --source "$root" --remote origin --push
 else
   if ! git remote get-url origin >/dev/null 2>&1; then
-    git remote add origin https://github.com/OmarDardery/smart-taskbar.git
+    git remote add origin https://github.com/OmarDardery/smart-taskbar-noctalia.git
   fi
   remote_url="$(git remote get-url origin)"
-  if [[ "$remote_url" != https://github.com/OmarDardery/smart-taskbar.git && "$remote_url" != git@github.com:OmarDardery/smart-taskbar.git ]]; then
+  if [[ "$remote_url" != https://github.com/OmarDardery/smart-taskbar-noctalia.git && "$remote_url" != git@github.com:OmarDardery/smart-taskbar-noctalia.git ]]; then
     echo 'Unexpected origin URL; inspect the repository before publishing.' >&2
     exit 1
   fi
