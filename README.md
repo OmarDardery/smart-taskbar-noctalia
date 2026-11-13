@@ -34,6 +34,6 @@ Community submission: [draft PR #1434](https://github.com/noctalia-dev/community
 
 Update an existing source with `noctalia msg plugins update smart-taskbar`, then enable the plugin again. Version 0.1.3 declares API 52.
 
-Version 0.1.2 hides the entire widget when no matching windows remain, shows numeric badges only for duplicates, groups settings through a page selector, and adds optional fixed-cell hover enlargement.
+Smart Taskbar hides when no matching windows remain, shows numeric badges only for duplicates, and offers optional fixed-cell hover enlargement.
 
 Version 0.1.3 removes the settings-page dropdown. Expand Widget to see all plugin controls together; related settings remain adjacent. Separate plugin accordion sections require a public Noctalia API enhancement.

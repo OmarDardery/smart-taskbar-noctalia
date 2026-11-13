@@ -1,5 +1,7 @@
 # [FEATURE] Public native sections for manifest-declared plugin settings
 
+Status: issue creation was attempted but GitHub returned HTTP 403, `Resource not accessible by integration`; no upstream issue was created.
+
 Plugin widget settings all appear in the host editor's generic Widget accordion. A plugin with behavior, application filtering, layout, appearance, interaction, and diagnostic controls cannot place them in individual native sections.
 
 The current public manifest schema exposes label_key, description_key, typed defaults, ranges, visible_when, and advanced, but no group or section field. Core ManifestField has no such member, and manifestSettingSpecs leaves WidgetSettingPresentation.group at its default "widget". Built-in widgets use native groups, but plugins cannot declare them through the public API.
