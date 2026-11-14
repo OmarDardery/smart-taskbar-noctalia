@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
 COLORS = {
-    'surface_container': '#232733', 'surface_container_high': '#2d3141', 'surface_container_highest': '#373b4b', 'on_primary': '#202e50', 'primary_container': '#3d4770',
+    'surface_container': '#232733', 'surface_container_high': '#2d3141', 'surface_container_highest': '#373b4b', 'on_primary': '#202e50', 'on_primary_container': '#dce1ff', 'primary_container': '#3d4770',
     'secondary_container': '#4b4163', 'on_secondary_container': '#eadeff',
     'primary': '#b6c4ff', 'on_surface': '#e5e5ee',
     'on_surface_variant': '#bfc2d2', 'outline_variant': '#454958', 'error': '#ffb4ab',

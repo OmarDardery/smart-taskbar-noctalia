@@ -298,6 +298,8 @@ check("inline counts share the capsule and singles keep their compact size", fun
   local duplicate,single=groups[1],groups[2]
   local badge=find(tree,"badge:"..duplicate.key)
   equal(badge.props.translateX,nil); equal(badge.props.translateY,nil)
+  equal(badge.props.fill,nil); equal(badge.props.border,nil); equal(badge.props.radius,nil)
+  equal(badge.children[1].props.color,"on_primary_container")
   equal(badge.children[1].props.text,"5")
   equal(find(tree,single.key).props.width,Model.peakIconSize(config)+8)
   assert(find(tree,duplicate.key).props.width>find(tree,single.key).props.width)

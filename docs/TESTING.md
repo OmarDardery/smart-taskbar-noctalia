@@ -97,3 +97,5 @@ Repeat the full desktop matrix separately under Umbriel, niri, Hyprland, Mango a
 ## Version 1.1.0 appearance regression checks
 
 Eight additional executable checks cover inline capsule counts, placement changes and disabled counts, narrow side bars, mixed-width overflow and focus reveal, 3,250 mixed-width layout budgets across both orientations, proportional multi-digit overlays, readable fallback for small icons, and hover feedback without magnification. All 63 Luau fixture tests passed. Updated grouped previews show the inline mode and remain explicitly labeled offline fixtures. These new appearance changes have not yet been rechecked on the author's Umbriel desktop.
+
+Version 1.1.1: inline counts have no independent fill, border or radius and use the shared app capsule contrast role. The 63 Luau checks pass, including assertions for the unified appearance. Desktop recheck remains pending.
