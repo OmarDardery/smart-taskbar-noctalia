@@ -118,3 +118,48 @@ check("legacy detection recognizes each public compositor environment",function(
   for _,pair in ipairs(cases) do env={[pair[1]]="value"}; equal(module_transport.new(h).name,pair[2]) end
   env={NIRI_SOCKET="",XDG_CURRENT_DESKTOP="niri"}; equal(module_transport.new(h).name,"niri")
 end)
+
+check("niri full snapshots deduplicate IDs and reject malformed event families",function()
+  local b=Compositor.new("niri")
+  local windows={}
+  for i=1,2000 do table.insert(windows,{id=i,app_id="a",is_focused=i==2000}) end
+  table.insert(windows,windows[1]); table.insert(windows,{id="invalid"})
+  assert(Compositor.event(b,"WindowsChanged",{windows=windows})); equal(#b.windows,2000)
+  assert(not Compositor.event(b,"WindowsChanged",{windows=windows}))
+  assert(not Compositor.event(b,"WindowsChanged",{windows=true})); equal(#b.windows,2000)
+  assert(not Compositor.event(b,"WorkspacesChanged",{workspaces=true}))
+  assert(not Compositor.event(b,"WindowOpenedOrChanged",{window={id=-1}}))
+  assert(Compositor.event(b,"WindowOpenedOrChanged",{window={id=2001,app_id="new"}}))
+  equal(#b.windows,2001)
+end)
+check("appearance changes preserve expansion and reuse live icon entries",function()
+  configure("expand_mode","click"); emit({window(1,"a",true)})
+  onClick(); equal(expanded,true)
+  local before=resolverCalls
+  configure("border",not config.border); equal(expanded,true); equal(resolverCalls,before)
+  configure("inline_count_style","bubble"); equal(expanded,true); equal(resolverCalls,before)
+  configure("inline_count_style","plain")
+  emit({window(2,"b",true)})
+  local entries=0; for _ in pairs(icons) do entries+=1 end; equal(entries,1)
+end)
+check("hover animation reuses geometry instead of scanning applications each frame",function()
+  configure("expand_mode","always"); configure("hover_enlarge",true); configure("animations",true)
+  emit({window(1,"a",true),window(2,"b")})
+  local original=Model.layout
+  local calculations=0
+  Model.layout=function(...) calculations+=1; return original(...) end
+  local key=groups[2].key
+  find(tree,key).props.onHover("true")
+  for _=1,8 do now+=20; update() end
+  equal(calculations,0)
+  find(tree,key).props.onHover("false")
+  Model.layout=original
+  configure("hover_enlarge",false)
+end)
+check("wheel gestures at viewport edges do not redraw unchanged content",function()
+  emit({window(1,"a",true)})
+  now+=1000; update()
+  local before=renders
+  onScroll("vertical",1,true); onScroll("vertical",-1,true)
+  equal(renders,before)
+end)

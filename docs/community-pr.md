@@ -12,7 +12,7 @@ Smart Taskbar is one API 52+ Luau bar widget with stable collapsed extent, group
 
 Empty states hide the entire widget. Single-window apps have no count marker or placeholder lane; duplicates show proportional numeric badges, with overlay or inline capsule placement. Variable-width inline groups stay within the configured budget, including on side bars. Optional hover enlargement uses paint transforms in fixed cells, and all settings are visible together in the main Widget editor, with related fields adjacent and no page selector.
 
-Manual drag ordering stays within the widget and is in-memory. In manual mode expansion stays open until explicitly clicked because the public API lacks drag-start/end callbacks. Right click opens settings because native context menus are panel-only. Pin lists are settings-driven because configuration is read-only. Version 1.1.2 supports Umbriel on API 52/53 through its public CLI event stream; API 54+ uses native subscriptions. The host’s API range is authoritative.
+Manual drag ordering stays within the widget and is in-memory. In manual mode expansion stays open until explicitly clicked because the public API lacks drag-start/end callbacks. Right click opens settings because native context menus are panel-only. Pin lists are settings-driven because configuration is read-only. Version 1.1.3 supports Umbriel on API 52/53 through its public CLI event stream; API 54+ uses native subscriptions. The host’s API range is authoritative.
 
 **Umbriel is the only compositor tested on a real desktop**, as reported by the author. niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only and have not been tested on real desktops. The cloud environment has no Noctalia/compositor session. The full acceptance matrix, scaling and resource measurements remain pending. The visual assets are clearly labeled offline fixture previews, not live screenshots.
 
@@ -31,7 +31,7 @@ Network calls: none. Filesystem writes: none. Host icon lookup reads icon/deskto
 - **Noctalia version tested against:** no running shell; source/API reviewed at core commit `42581ce5d3599be9cf54e971607c2d3ae43525fe`
 - **Plugin API level:** 52
 
-63 Luau fixture tests pass, including 9,100 width combinations, five-window badge/cycling, twenty-app overflow, focus reveal, filters, aliases, pinned running windows, drag reorder, safe actions, setting changes and reset recovery. All four sources compile with `luau-compile`. Canonical community manifest validation passes at the exact community-pinned validator `99a892dc9cb3490634412701c45acd024fe0383b`, whose 178 tests also pass. Two real-pipe shell integration tests verify snapshot framing, disconnect reset, reconnect, and process-group cleanup with a fake Umbriel CLI. Comprehensive desktop acceptance remains pending beyond the author-reported Umbriel test.
+68 Luau fixture tests pass, including 9,100 width combinations, five-window badge/cycling, twenty-app overflow, focus reveal, filters, aliases, pinned running windows, drag reorder, safe actions, setting changes and reset recovery. All four sources compile with `luau-compile`. Canonical community manifest validation passes at the exact community-pinned validator `99a892dc9cb3490634412701c45acd024fe0383b`, whose 178 tests also pass. Two real-pipe shell integration tests verify snapshot framing, disconnect reset, reconnect, and process-group cleanup with a fake Umbriel CLI. Comprehensive desktop acceptance remains pending beyond the author-reported Umbriel test.
 
 ## Screenshots / Videos
 
@@ -71,3 +71,5 @@ Only the author-reported Umbriel desktop test is checked. Other compositor tests
 14 additional Python tests cover normalization, bounded framing and real local UNIX-socket fixtures for Hyprland, Mango and Sway. No live compositor result is claimed.
 
 Inline counts can use either a plain number on the shared app capsule or a separate number bubble inside it.
+
+The optimization patch caches layout geometry, avoids no-op scroll redraws and repeated icon resolution, preserves expansion on appearance changes, and normalizes full niri snapshots in one pass.
