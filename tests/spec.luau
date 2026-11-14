@@ -292,5 +292,92 @@ check("legacy editor values preserve expansion and cached icons", function()
   settings.settings_page="appearance"; onConfigChanged()
   equal(renders,beforeRenders); equal(resolverCalls,beforeIcons); equal(expanded,beforeExpanded)
 end)
+check("inline counts share the capsule and singles keep their compact size", function()
+  configure("expand_mode","always"); configure("badge_style","inline")
+  local windows=table.clone(five); table.insert(windows,window(6,"terminal")); emit(windows)
+  local duplicate,single=groups[1],groups[2]
+  local badge=find(tree,"badge:"..duplicate.key)
+  equal(badge.props.translateX,nil); equal(badge.props.translateY,nil)
+  equal(badge.children[1].props.text,"5")
+  equal(find(tree,single.key).props.width,Model.peakIconSize(config)+8)
+  assert(find(tree,duplicate.key).props.width>find(tree,single.key).props.width)
+  equal(find(tree,"badge:"..single.key),nil)
+  snapshot("grouped")
+end)
+check("inline count placement follows the selected side and can be disabled", function()
+  configure("badge_placement","before")
+  local group=groups[1]; equal(find(tree,group.key).children[1].props.key,"badge:"..group.key)
+  configure("badge_placement","after")
+  equal(find(tree,group.key).children[2].props.key,"badge:"..group.key)
+  configure("duplicate_indicator","none")
+  equal(find(tree,group.key).props.width,Model.peakIconSize(config)+8)
+  equal(find(tree,"badge:"..group.key),nil)
+  configure("duplicate_indicator","badge")
+end)
+check("inline counts fit below side-bar icons without increasing bar thickness", function()
+  vertical=true; onConfigChanged(); emit(five)
+  local item=find(tree,groups[1].key)
+  equal(item.kind,"column"); equal(item.props.width,Model.peakIconSize(config)+8)
+  assert(item.props.height>=item.children[1].props.height+item.children[2].props.height+12)
+  assert(tree.props.width<=34 and tree.props.height<=config.max_width)
+  vertical=false; onConfigChanged()
+end)
+check("inline overflow reveals off-screen focus with mixed group widths", function()
+  local windows={}
+  for i=1,25 do
+    table.insert(windows,window(i,"mixed"..i,false))
+    if i%2==0 then for n=1,4 do table.insert(windows,window(1000+i*10+n,"mixed"..i,false)) end end
+  end
+  emit(windows); onScroll("vertical",1,true); local saved=offset; assert(saved>0)
+  windows[#windows].active=true; emit(windows)
+  local focus
+  for i,g in ipairs(groups) do if g.focused then focus=i end end
+  local layout=Model.layout(config,#groups,groups,offset,false)
+  assert(focus>offset and focus<=offset+layout.capacity)
+  assert(tree.props.width<=config.max_width)
+end)
+check("inline mixed-width layout respects every tested width budget", function()
+  local mixed={}
+  for i=1,25 do mixed[i]={windows=table.create(i%3==0 and 105 or (i%2==0 and 5 or 1),true)} end
+  for width=48,496,7 do
+    for _,side in ipairs({false,true}) do
+      local c=table.clone(config); c.max_width=width; c.min_width=2000
+      for off=0,24 do
+        local l=Model.layout(c,#mixed,mixed,off,side)
+        assert(l.width<=width and l.capacity>=1)
+        local used=0
+        for i=off+1,math.min(#mixed,off+l.capacity) do
+          used+=Model.cellExtent(c,mixed[i],side)+(i>off+1 and c.icon_spacing or 0)
+        end
+        assert(used<=l.viewport or l.capacity==1)
+      end
+    end
+  end
+end)
+check("overlay counts scale with icons and preserve multi-digit numbers", function()
+  configure("badge_style","overlay")
+  local many={}; for i=1,105 do many[i]=window(i,"a",i==1) end
+  emit(many)
+  local badge=find(tree,"badge:"..groups[1].key)
+  equal(badge.children[1].props.text,"105")
+  assert(badge.props.height>=14 and badge.props.height<=20)
+  assert(badge.props.translateX~=nil and badge.props.border=="surface_container")
+  configure("badge_style","overlay")
+end)
+check("small icons preserve large counts by switching to inline placement", function()
+  configure("icon_size",12)
+  local badge=find(tree,"badge:"..groups[1].key)
+  equal(badge.children[1].props.text,"105"); equal(badge.props.translateX,nil)
+  assert(find(tree,groups[1].key).props.width>=badge.props.width+Model.peakIconSize(config)+12)
+  configure("icon_size",22)
+end)
+check("hover feedback works without enabling magnification", function()
+  configure("hover_enlarge",false); emit({window(1,"a",true),window(2,"b")})
+  local key=groups[2].key
+  find(tree,key).props.onHover("true")
+  equal(find(tree,key).props.fill,"surface_container_highest")
+  find(tree,key).props.onHover("false")
+  equal(find(tree,key).props.fill,"surface_container/0")
+end)
 check("hot reload teardown unsubscribes", function() onExit(); equal(eventCallback,nil) end)
 print(string.format("%d tests passed", passed))

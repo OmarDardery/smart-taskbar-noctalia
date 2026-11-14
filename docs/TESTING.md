@@ -4,7 +4,7 @@ Executed on 2026-11-13 in the attached Linux cloud environment.
 
 ## Checks that actually ran
 
-- **55 executable Luau fixture tests passed** (45 native/backend scenarios plus 10 API 52/53 compatibility tests). The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
+- **63 executable Luau fixture tests passed** (53 native/backend scenarios plus 10 API 52/53 compatibility tests). The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
 - **9,100 layout combinations** exercised within the width test: maximum extents 48–496 by 7, icon sizes 12–48 by 6, counts 0/1/5/16/100, and hover scales 1/1.05/1.15/1.5. Includes cross-field minimum width exceeding maximum width. Every computed root extent stayed within its maximum; capacity never became zero.
 - Default side-bar tree width fits the standard 34-pixel bar; vertical main-axis extent is bounded. This is a tree assertion, not a rendered DPI check.
 - **Official community manifest validation passed**, using exact community-pinned validator commit `99a892dc9cb3490634412701c45acd024fe0383b`.
@@ -93,3 +93,7 @@ Version 0.1.3 package checks confirm every plugin control is exposed on the same
 Additional Luau tests cover niri urgency, ignored geometry/layout changes, atomic chunk assembly, cached replay, Mango multi-tag filters, stable workspace icons, missing application IDs and targeted CLI argument validation/timeouts. Idle callbacks neither render nor rearm the update timer. Reproduce bridge checks with `PYTHONDONTWRITEBYTECODE=1 python3 tests/bridge_test.py`; reproduce shell checks with `python3 tests/stream_test.py`.
 
 Repeat the full desktop matrix separately under Umbriel, niri, Hyprland, Mango and Sway before claiming production desktop acceptance. Python/socket fixture results do not establish actual window actions, monitor scaling or resource measurements.
+
+## Version 1.1.0 appearance regression checks
+
+Eight additional executable checks cover inline capsule counts, placement changes and disabled counts, narrow side bars, mixed-width overflow and focus reveal, 3,250 mixed-width layout budgets across both orientations, proportional multi-digit overlays, readable fallback for small icons, and hover feedback without magnification. All 63 Luau fixture tests passed. Updated grouped previews show the inline mode and remain explicitly labeled offline fixtures. These new appearance changes have not yet been rechecked on the author's Umbriel desktop.
