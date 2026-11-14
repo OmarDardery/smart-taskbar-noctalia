@@ -27,6 +27,7 @@ Expand **Widget** in the normal editor. All plugin controls are available togeth
 | Appearance | `collapsed_label` | `"none"` | Optional text within the fixed width. Single-window apps never show a count; side bars show the icon only. |
 | Appearance | `duplicate_indicator` | `"badge"` | Numeric corner badges appear only for applications with more than one window. |
 | Appearance | `badge_style` | `"overlay"` | Overlay a proportional count or place it beside the icon inside its app capsule. Inline counts appear below icons on side bars; single-window apps reserve no count space. |
+| Appearance | `inline_count_style` | `"plain"` | Plain number on the shared capsule, or a separate number bubble inside it. Applies to inline counts only; changing it preserves layout dimensions. |
 | Appearance | `badge_placement` | `"after"` | Choose the upper left/right overlay corner or before/after the inline icon. Side bars keep inline counts below. |
 | Appearance | `hover_enlarge` | `false` | Magnify the hovered application inside a fixed cell. No bar movement; respects reduced motion. |
 | Appearance | `hover_scale` | `1.15` | Maximum icon scale. Set bar thickness to at least icon size × scale + 8 logical pixels; 1.15 fits a 22 px icon in a 34 px bar. |

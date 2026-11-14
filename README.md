@@ -4,7 +4,7 @@
 
 A Noctalia **API 52+** application switcher, distributed as one bar widget. Source and installation documentation are in [smart-taskbar/README.md](smart-taskbar/README.md).
 
-Version 1.1.1 is a release candidate. The Luau fixture tests and official community manifest validation run locally; live Noctalia desktop validation is pending. Umbriel now works with API 52/53 through its public CLI stream. API 54+ uses native subscriptions. Match the host’s reported API range; version labels alone are insufficient.
+Version 1.1.2 is a release candidate. The Luau fixture tests and official community manifest validation run locally; live Noctalia desktop validation is pending. Umbriel now works with API 52/53 through its public CLI stream. API 54+ uses native subscriptions. Match the host’s reported API range; version labels alone are insufficient.
 
 - [Settings reference](docs/settings.md)
 - [Validation and desktop test matrix](docs/TESTING.md)
@@ -34,7 +34,7 @@ Add `omardardery/smart-taskbar:taskbar` in Bar settings. Native enabling and des
 
 Community submission: [draft PR #1434](https://github.com/noctalia-dev/community-plugins/pull/1434). Automated checks pass; live desktop acceptance remains pending.
 
-Update an existing source with `noctalia msg plugins update smart-taskbar`, then enable the plugin again. Version 1.1.1 declares API 52.
+Update an existing source with `noctalia msg plugins update smart-taskbar`, then enable the plugin again. Version 1.1.2 declares API 52.
 
 Smart Taskbar hides when no matching windows remain, shows numeric badges only for duplicates, and offers optional fixed-cell hover enlargement.
 
@@ -42,4 +42,4 @@ All plugin settings are visible together without a page dropdown. Expand Widget 
 
 [Compositor compatibility and protocol references](docs/COMPATIBILITY.md). Automated checks cover all five adapters; real desktop acceptance remains pending.
 
-Version 1.1.1 adds proportional count badges, an inline capsule count option, content-aware overflow sizing and hover feedback without magnification. The new visuals have fixture coverage; an Umbriel desktop recheck is pending.
+Version 1.1.2 adds proportional count badges, an inline capsule count option, content-aware overflow sizing and hover feedback without magnification. The new visuals have fixture coverage; an Umbriel desktop recheck is pending.
