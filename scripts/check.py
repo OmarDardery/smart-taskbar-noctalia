@@ -16,7 +16,12 @@ assert not any(key in manifest for key in ('service', 'panel', 'layer'))
 translations = json.loads((plugin/'translations/en.json').read_text())
 for setting in manifest['widget'][0]['setting']:
     assert setting['key'] != 'settings_page'
-    assert not setting.get('visible_when'), 'Every plugin control must be available together'
+    expected_visibility = None
+    if setting['key'] in {'min_width','collapsed_width','icon_size','icon_spacing','capsule_radius'}:
+        expected_visibility = {'key':'sizing_mode','values':['manual']}
+    elif setting['key'] == 'sizing_bar':
+        expected_visibility = {'key':'sizing_mode','values':['auto']}
+    assert setting.get('visible_when') == expected_visibility, 'Only sizing-dependent fields may be hidden'
     assert not setting.get('advanced', False), 'No plugin controls hidden behind another toggle'
 
     value = setting['default']

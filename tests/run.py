@@ -28,13 +28,14 @@ def run_suite(fallback=False):
     source += (ROOT / 'tests/host.luau').read_text() + '\n'
     if fallback:
         source += (ROOT / 'tests/fallback-host.luau').read_text() + '\n'
-    for name in ('model', 'compositor', 'transport'):
+    for name in ('model', 'sizing', 'compositor', 'transport'):
         source += 'local module_' + name + ' = (function()\n'
         module = (PLUGIN / 'lib' / (name + '.luau')).read_text()
         module = module.replace('require("./compositor.luau")', 'module_compositor')
         source += module + '\nend)()\n'
     widget = (PLUGIN / 'widget.luau').read_text()
     widget = widget.replace('require("./lib/model.luau")', 'module_model')
+    widget = widget.replace('require("./lib/sizing.luau")', 'module_sizing')
     widget = widget.replace('require("./lib/compositor.luau")', 'module_compositor')
     widget = widget.replace('require("./lib/transport.luau")', 'module_transport')
     suite = (ROOT / ('tests/fallback-spec.luau' if fallback else 'tests/spec.luau')).read_text()

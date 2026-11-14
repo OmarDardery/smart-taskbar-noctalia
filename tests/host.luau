@@ -5,6 +5,8 @@ local widgetVisible = true
 local intervalWrites,lastCommandCallback = 0,nil
 local vertical, output, resolverCalls = false, "DP-1", 0
 local settings = table.clone(defaults)
+local shellSettings,hostOutputs={},{}
+local settingReads=0
 local translations = {
   title = "Smart Taskbar", hint = "Click to expand • Wheel to navigate",
   disconnected = "No compositor snapshot", action_failed = "Action failed",
@@ -30,6 +32,8 @@ for _, name in ipairs({ "column", "row", "image", "glyph", "label", "box", "drag
   ui[name] = function(props, children) return { kind = name, props = props or {}, children = children or {} } end
 end
 local noctalia = {
+  getSetting = function(key) settingReads+=1; return shellSettings[key] end,
+  outputs = function() return hostOutputs end,
   getConfig = function(key) assert(settings[key] ~= nil, "Undeclared config: " .. key); return settings[key] end,
   nowMs = function() return now end,
   setUpdateInterval = function(ms) interval=ms; intervalWrites+=1 end,

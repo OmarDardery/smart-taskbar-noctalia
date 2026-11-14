@@ -1,6 +1,6 @@
 # Compositor compatibility
 
-Minimum Noctalia plugin API: **52**. Version 1.1.3 is a release candidate; Umbriel is the only compositor tested on a real desktop, as reported by the author. niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only; their real desktop compatibility is unverified. The complete acceptance matrix remains pending.
+Minimum Noctalia plugin API: **52**. Version 2.0.0 is a release candidate; Umbriel is the only compositor tested on a real desktop, as reported by the author. niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only; their real desktop compatibility is unverified. The complete acceptance matrix remains pending.
 
 | Compositor | Event transport | Focus/close | Minimize/restore | Notes |
 | --- | --- | --- | --- | --- |

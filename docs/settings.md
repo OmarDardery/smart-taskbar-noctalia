@@ -1,6 +1,6 @@
 # Settings
 
-Expand **Widget** in the normal editor. All plugin controls are available together, with related fields adjacent. No dropdown, conditional page visibility, or advanced toggle hides plugin controls. The Area column below describes their ordering; it does not claim native accordion sections. Noctalia’s public plugin API currently has no section/group field.
+Expand **Widget** in the normal editor. Plugin controls are ordered by topic. Sizing has an Auto/Manual dropdown: Auto hides the five dimensions it controls, and Manual restores them. Maximum width remains visible. The bar-name hint appears only in Auto. There is no settings-page selector or advanced toggle. The Area column below describes their ordering; it does not claim native accordion sections. Noctalia’s public plugin API currently has no section/group field.
 
 | Area | Setting | Default | Meaning |
 | --- | --- | --- | --- |
@@ -17,11 +17,13 @@ Expand **Widget** in the normal editor. All plugin controls are available togeth
 | Applications | `sorting` | `"launch"` | Launch order means first observed order. Manual order is per instance and resets on reload. |
 | Applications | `pinned_apps` | `[]` | Exact desktop-entry IDs for launchers. Launchers appear with matching open windows; the entire widget hides when no matching windows remain. |
 | Applications | `exclusions` | `[]` | Exact normalized desktop/application IDs. No shell patterns. |
-| Layout | `min_width` | `64` | Minimum expanded extent in logical pixels, limited by maximum width. |
+| Layout | `sizing_mode` | `"auto"` | Auto fits dimensions to matching configured bars; Manual restores saved sizes. Auto hides the dimensions it controls. |
+| Layout | `sizing_bar` | `""` | Optional configured bar name; shown only in Auto. Empty fits matching placements conservatively. |
+| Layout | `min_width` | `64` | Manual only; hidden in Auto. Minimum expanded extent in logical pixels, limited by maximum width. |
 | Layout | `max_width` | `420` | Main-axis limit, including padding and arrows. Use bar/widget scale 1 and host capsule padding 0 for the same outer limit. |
-| Layout | `collapsed_width` | `64` | Fixed collapsed extent in logical pixels. Hidden completely when no matching windows are open. |
-| Layout | `icon_size` | `22` | Base size in logical pixels. Leave room for hover enlargement within your bar thickness. |
-| Layout | `icon_spacing` | `4` | Gap between application cells. Single-window apps have no count lane or marker. |
+| Layout | `collapsed_width` | `64` | Manual only; hidden in Auto. Fixed collapsed extent in logical pixels. Hidden completely when no matching windows are open. |
+| Layout | `icon_size` | `22` | Manual only; hidden in Auto. Base size in logical pixels. Leave room for hover enlargement within your bar thickness. |
+| Layout | `icon_spacing` | `4` | Manual only; hidden in Auto. Gap between application cells. Single-window apps have no count lane or marker. |
 | Layout | `overflow_behavior` | `"items"` | Wheel navigation replaces visible items; the viewport is clipped. |
 | Layout | `show_scroll_indicators` | `true` | Subtle direction indicators inside the width budget. |
 | Appearance | `collapsed_label` | `"none"` | Optional text within the fixed width. Single-window apps never show a count; side bars show the icon only. |
@@ -31,7 +33,7 @@ Expand **Widget** in the normal editor. All plugin controls are available togeth
 | Appearance | `badge_placement` | `"after"` | Choose the upper left/right overlay corner or before/after the inline icon. Side bars keep inline counts below. |
 | Appearance | `hover_enlarge` | `false` | Magnify the hovered application inside a fixed cell. No bar movement; respects reduced motion. |
 | Appearance | `hover_scale` | `1.15` | Maximum icon scale. Set bar thickness to at least icon size × scale + 8 logical pixels; 1.15 fits a 22 px icon in a 34 px bar. |
-| Appearance | `capsule_radius` | `14` | Logical pixels for the plugin’s own theme-colored capsule. |
+| Appearance | `capsule_radius` | `14` | Manual only; hidden in Auto. Logical pixels for the plugin’s own theme-colored capsule. |
 | Appearance | `opacity` | `0.9` | Background alpha only; icons and text stay opaque. |
 | Appearance | `border` | `false` | Use the active theme outline role. |
 | Appearance | `active_indicator` | `true` | Use the theme primary container role. |

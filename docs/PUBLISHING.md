@@ -1,6 +1,6 @@
 # Distribution and publication status
 
-Version **1.1.3 release candidate**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **52**.
+Version **2.0.0 release candidate**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **52**.
 
 The publisher created the public source repository [OmarDardery/smart-taskbar-noctalia](https://github.com/OmarDardery/smart-taskbar-noctalia) and [community fork](https://github.com/OmarDardery/community-plugins). The repository name differs from the canonical plugin ID; the plugin directory remains `smart-taskbar/`, as required by Noctalia.
 
@@ -53,4 +53,4 @@ The v0.1.3 native-settings-sections feature request was prepared and issue creat
 
 Version 1.0.0 adds public-protocol Hyprland, Mango and Sway adapters, API 52/53 niri events, event deduplication, coalesced snapshots and stable multi-tag/workspace grouping. Automated protocol coverage does not replace live desktop acceptance. The GitHub release is marked prerelease until that acceptance is recorded.
 
-Version 1.1.3 polishes count badges and adds inline capsule placement with width-aware overflow. Only Umbriel has author-reported desktop testing; these new visual changes still require a desktop recheck. Other compositor adapters have automated fixtures only.
+Version 2.0.0 polishes count badges and adds inline capsule placement with width-aware overflow. Only Umbriel has author-reported desktop testing; these new visual changes still require a desktop recheck. Other compositor adapters have automated fixtures only.

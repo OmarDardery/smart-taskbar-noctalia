@@ -1,47 +1,40 @@
-# Smart Taskbar
+# Smart Taskbar 2.0
 
-**Desktop testing: Umbriel only (author-reported). niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only; real desktop compatibility is unverified.**
+A compact Noctalia API 52+ application switcher with automatic bar sizing, grouped window counts, optional hover enlargement and bounded overflow navigation.
 
-A Noctalia **API 52+** application switcher, distributed as one bar widget. Source and installation documentation are in [smart-taskbar/README.md](smart-taskbar/README.md).
+**Only Umbriel has author-reported desktop testing.** niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only. Version 2.0.0 is a release candidate; its new sizing behavior needs a desktop recheck.
 
-Version 1.1.3 is a release candidate. The Luau fixture tests and official community manifest validation run locally; live Noctalia desktop validation is pending. Umbriel now works with API 52/53 through its public CLI stream. API 54+ uses native subscriptions. Match the host’s reported API range; version labels alone are insufficient.
-
-- [Settings reference](docs/settings.md)
-- [Validation and desktop test matrix](docs/TESTING.md)
-- [Public API decisions](docs/API.md)
-- [Publishing status](docs/PUBLISHING.md)
-
-Run executable tests with Python 3.11+ and the official Luau CLI:
-
-```sh
-LUAU=/path/to/luau python3 tests/run.py
-```
-
-The tests execute the shipped Luau source with a deterministic host fixture. They do not start Noctalia or a compositor. Optional labeled offline previews can be regenerated with `python3 tests/preview.py` after installing Pillow in your development environment.
-
-Umbriel/niri need no Python. Hyprland, Mango and Sway use one host-owned Python standard-library helper for public local socket IPC. There is no network access, external daemon or state file. On API 52/53 with Umbriel it starts one host-managed shell/CLI event stream. See the plugin README for conditional CLI requirements.
-
-## Install
-
-Requires a Noctalia build supporting **plugin API 52 or newer**:
+## Install or update
 
 ```sh
 noctalia msg plugins source add smart-taskbar git https://github.com/OmarDardery/smart-taskbar-noctalia
 noctalia msg plugins enable omardardery/smart-taskbar
 ```
 
-Add `omardardery/smart-taskbar:taskbar` in Bar settings. Native enabling and desktop behavior still require live acceptance testing. See the plugin README for width-budget setup and compatibility details.
+For an existing installation:
 
-Community submission: [draft PR #1434](https://github.com/noctalia-dev/community-plugins/pull/1434). Automated checks pass; live desktop acceptance remains pending.
+```sh
+noctalia msg plugins update smart-taskbar
+noctalia msg plugins enable omardardery/smart-taskbar
+```
 
-Update an existing source with `noctalia msg plugins update smart-taskbar`, then enable the plugin again. Version 1.1.3 declares API 52.
+Add **Smart Taskbar / taskbar** in Bar settings. The type is `omardardery/smart-taskbar:taskbar`.
 
-Smart Taskbar hides when no matching windows remain, shows numeric badges only for duplicates, and offers optional fixed-cell hover enlargement.
+## Sizing
 
-All plugin settings are visible together without a page dropdown. Expand Widget to see all plugin controls together; related settings remain adjacent. Separate plugin accordion sections require a public Noctalia API enhancement.
+In **Widget → Sizing**, choose **Auto** or **Manual**. Auto is the default. It reads public bar configuration when settings change, fits icons and hover enlargement to the available thickness, and adjusts spacing, radius and collapsed size. It compensates for bar/widget content and text scaling; output DPI is already handled by the host.
 
-[Compositor compatibility and protocol references](docs/COMPATIBILITY.md). Automated checks cover all five adapters; real desktop acceptance remains pending.
+Auto hides **Minimum width, Collapsed width, Icon size, Icon spacing, and Capsule radius**. Manual shows them again and restores saved values. **Maximum width** remains available in both modes. The optional **Sizing bar name** appears only in Auto mode.
 
-Version 1.1.3 adds proportional count badges, an inline capsule count option, content-aware overflow sizing and hover feedback without magnification. The new visuals have fixture coverage; an Umbriel desktop recheck is pending.
+There is no public measured-thickness or placement-ID API. Auto conservatively fits matching configured placements on this output and orientation. Use Sizing bar name to restrict it to a specific bar. Missing placements fall back to saved manual dimensions. Capsule groups and custom wrappers can add outer extent beyond the plugin's budget; see the full README.
 
-Version 1.1.3 reduces redundant layout/hover work and icon resolution, fixes appearance changes collapsing the taskbar, and handles niri full snapshots in one pass. No new settings or dependencies.
+## Documentation
+
+- [Plugin usage, settings and conditional dependencies](smart-taskbar/README.md)
+- [Settings reference](docs/settings.md)
+- [Compositor compatibility](docs/COMPATIBILITY.md)
+- [Executed tests and pending desktop checks](docs/TESTING.md)
+- [Public API decisions](docs/API.md)
+- [Community PR #1434](https://github.com/noctalia-dev/community-plugins/pull/1434)
+
+Run `LUAU=/path/to/luau python3 tests/run.py`, `python3 tests/stream_test.py`, `python3 tests/bridge_test.py`, and `python3 scripts/check.py` for reproducible checks. Preview images are visibly labeled offline fixtures, not desktop screenshots.

@@ -4,7 +4,7 @@ Executed on 2026-11-13 in the attached Linux cloud environment.
 
 ## Checks that actually ran
 
-- **68 executable Luau fixture tests passed** (58 native/backend scenarios plus 10 API 52/53 compatibility tests). The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
+- **75 executable Luau fixture tests passed** (65 native/backend scenarios plus 10 API 52/53 compatibility tests). The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
 - **9,100 layout combinations** exercised within the width test: maximum extents 48–496 by 7, icon sizes 12–48 by 6, counts 0/1/5/16/100, and hover scales 1/1.05/1.15/1.5. Includes cross-field minimum width exceeding maximum width. Every computed root extent stayed within its maximum; capacity never became zero.
 - Default side-bar tree width fits the standard 34-pixel bar; vertical main-axis extent is bounded. This is a tree assertion, not a rendered DPI check.
 - **Official community manifest validation passed**, using exact community-pinned validator commit `99a892dc9cb3490634412701c45acd024fe0383b`.
@@ -107,3 +107,9 @@ Version 1.1.2 adds an inline count appearance selector. All 64 Luau checks pass;
 All 68 Luau checks, 14 Python bridge checks and two shell-stream lifecycle checks passed. All four Luau sources compiled. Regression checks cover a 2,000-window niri snapshot with duplicate/invalid IDs, malformed event-family rejection, preserved expansion across appearance changes, icon reuse and stale-entry release, zero layout recalculations during hover animation, and no redraw for wheel gestures at viewport edges. Existing idle checks still observe zero redraws, icon lookups and timer rearming across 1,000 callbacks. These are fixture assertions, not native CPU/RSS measurements.
 
 Layout overflow detection stops once overflow is established. Hover interpolation visits only previously animated keys. Grouping reuses normalized app IDs and the tracked focused-window identity. No new settings or dependencies were added. Only Umbriel has author-reported desktop testing; the current patch still needs a desktop recheck.
+
+## Version 2.0.0 automatic sizing
+
+Seven added Luau checks cover thickness/content-scale/hover combinations, output overrides and ambiguous bars, host capsules and groups, missing-placement fallback, live bar changes without idle settings reads, 160% output DPI without double scaling, text-scale compensation and independence from all hidden manual sizes. Package checks require exactly the documented Auto/Manual visibility conditions and keep Maximum width always visible. All 75 Luau tests pass. The five shipped Luau files compile.
+
+The public bar API has no measured geometry or placement identity method. Auto uses API 26's public getSetting and its configuration-change notifications, preserving the existing minimum plugin API 52. Monitor override source order cannot be recovered from a Luau table; multiple matching candidates are fit conservatively. The fixture tests do not establish actual GUI visibility, native geometry, fractional scaling or renderer acceptance. Only Umbriel has author-reported desktop testing; the 2.0 sizing changes need a desktop recheck.

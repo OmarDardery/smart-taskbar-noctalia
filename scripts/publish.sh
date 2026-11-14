@@ -22,7 +22,8 @@ else
   fi
   git push -u origin main
 fi
-git push origin v0.1.3
+version="$(python3 -c 'import tomllib; print(tomllib.load(open("smart-taskbar/plugin.toml", "rb"))["version"])')"
+git push origin "v${version}"
 if ! gh repo view OmarDardery/community-plugins >/dev/null 2>&1; then
   gh repo fork noctalia-dev/community-plugins --clone=false
 fi

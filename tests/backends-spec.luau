@@ -163,3 +163,88 @@ check("wheel gestures at viewport edges do not redraw unchanged content",functio
   onScroll("vertical",1,true); onScroll("vertical",-1,true)
   equal(renders,before)
 end)
+
+check("auto sizing fits bar thickness, hover peak and content scales",function()
+  local c=table.clone(config); c.sizing_mode="auto"; c.sizing_bar=""; c.collapsed_label="none"
+  local widgets={smart={type="omardardery/smart-taskbar:taskbar",capsule=false}}
+  for _,thickness in ipairs({12,16,24,34,44,64,96}) do
+    for _,scale in ipairs({0.5,1,1.6,2.5}) do
+      for _,zoom in ipairs({false,true}) do
+        local bars={default={thickness=thickness,position="top",scale=scale,border_width=1,start={"smart"}}}
+        c.hover_enlarge=zoom; c.hover_scale=1.5
+        local fit=Sizing.resolve(c,bars,widgets,"DP-1",false,{})
+        assert(fit.auto_sized)
+        assert((Model.peakIconSize(fit)+2*Model.cellPadding(fit))*scale<=thickness-2)
+        local l=Model.layout(fit,100)
+        assert(l.width*scale<=c.max_width)
+      end
+    end
+  end
+  widgets.smart.scale=2.5
+  c.hover_enlarge=true
+  local fit=Sizing.resolve(c,{default={thickness=12,position="top",scale=2.5,start={"smart"}}},widgets,"DP-1",false,{})
+  assert((Model.peakIconSize(fit)+2*Model.cellPadding(fit))*6.25<=12)
+end)
+check("auto sizing resolves output overrides and ambiguous bars conservatively",function()
+  local c=table.clone(config); c.sizing_mode="auto"; c.sizing_bar=""; c.hover_enlarge=false
+  local widgets={smart={type="omardardery/smart-taskbar:taskbar",capsule=false}}
+  local bars={small={thickness=34,position="top",start={"smart"}},
+    large={thickness=64,position="top",start={"smart"},monitor={dp={match="DP-1",thickness=44}}}}
+  equal(Sizing.resolve(c,bars,widgets,"DP-1",false,{}).icon_size,22)
+  c.sizing_bar="large"; equal(Sizing.resolve(c,bars,widgets,"DP-1",false,{}).icon_size,32)
+  bars.large.monitor.other={match="Panel",thickness=24}
+  equal(Sizing.resolve(c,bars,widgets,"DP-1",false,{{name="DP-1",description="Panel"}}).icon_size,12)
+end)
+check("auto sizing accounts for host capsule padding and groups",function()
+  local c=table.clone(config); c.sizing_mode="auto"; c.sizing_bar=""
+  local widgets={smart={type="omardardery/smart-taskbar:taskbar",capsule=true,capsule_padding=6,scale=1.5}}
+  local bars={default={thickness=44,position="left",scale=1,start={"smart"},capsule_thickness=0.76}}
+  local fit=Sizing.resolve(c,bars,widgets,"DP-1",true,{})
+  assert(fit.auto_sized)
+  assert((Model.peakIconSize(fit)+2*Model.cellPadding(fit))*1.5<=33)
+  assert((Model.layout(fit,100).width+12)*1.5<=c.max_width)
+  bars.default.start={"group:g"}; bars.default.capsule_group={{id="g",members={"smart"}}}
+  assert(Sizing.resolve(c,bars,widgets,"DP-1",true,{}).auto_sized)
+end)
+check("auto sizing falls back to manual for missing or incompatible placements",function()
+  local c=table.clone(config); c.sizing_mode="auto"; c.sizing_bar=""
+  equal(Sizing.resolve(c,nil,nil,"DP-1",false,{}),c)
+  equal(Sizing.resolve(c,{default={thickness=44,start={"other"}}},{},"DP-1",false,{}),c)
+  local widgets={smart={type="omardardery/smart-taskbar:taskbar"}}
+  local bars={default={thickness=44,position="left",start={"smart"}}}
+  equal(Sizing.resolve(c,bars,widgets,"DP-1",false,{}),c)
+  c.sizing_mode="manual"; equal(Sizing.resolve(c,bars,widgets,"DP-1",true,{}),c)
+end)
+check("live bar sizing changes update through configuration without idle polling",function()
+  shellSettings={bar={default={position="top",thickness=34,start={"smart"}}},
+    widget={smart={type="omardardery/smart-taskbar:taskbar",capsule=false}}}
+  configure("sizing_mode","auto"); configure("hover_enlarge",false)
+  emit({window(1,"a",true)}); equal(config.icon_size,22)
+  shellSettings.bar.default.thickness=44; onConfigChanged(); equal(config.icon_size,32)
+  snapshot("expanded")
+  local reads=settingReads
+  now+=1000; update(); for _=1,100 do update() end
+  equal(settingReads,reads)
+  configure("sizing_mode","manual"); equal(config.icon_size,settings.icon_size)
+  shellSettings={}; configure("sizing_mode","auto")
+end)
+
+check("automatic sizing uses logical pixels and compensates font scale",function()
+  local c=table.clone(config); c.sizing_mode="auto"; c.sizing_bar=""
+  local widgets={smart={type="omardardery/smart-taskbar:taskbar",font_scale=1.5}}
+  local bars={default={thickness=44,position="top",font_scale=1.5,start={"smart"}}}
+  local a=Sizing.resolve(c,bars,widgets,"DP-1",false,{{name="DP-1",scale=1}})
+  local b=Sizing.resolve(c,bars,widgets,"DP-1",false,{{name="DP-1",scale=1.6}})
+  equal(a.icon_size,b.icon_size); equal(a.max_width,b.max_width); equal(a.auto_text_scale,2.25)
+end)
+
+check("auto dimensions ignore all hidden manual size values",function()
+  local c=table.clone(config); c.sizing_mode="auto"; c.sizing_bar=""; c.collapsed_label="title"
+  local bars={default={thickness=44,position="top",start={"smart"}}}
+  local widgets={smart={type="omardardery/smart-taskbar:taskbar",capsule=false}}
+  local a=Sizing.resolve(c,bars,widgets,"DP-1",false,{})
+  c.icon_size=48; c.icon_spacing=30; c.min_width=2048; c.collapsed_width=2000; c.capsule_radius=40
+  local b=Sizing.resolve(c,bars,widgets,"DP-1",false,{})
+  equal(a.icon_size,b.icon_size); equal(a.icon_spacing,b.icon_spacing)
+  equal(a.min_width,b.min_width); equal(a.collapsed_width,b.collapsed_width); equal(a.capsule_radius,b.capsule_radius)
+end)

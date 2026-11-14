@@ -75,3 +75,9 @@ The bridge chunks snapshots into sub-32-KiB JSON envelopes to respect the host s
 Inline counts use supported row/column layout and theme roles. Group extents include badge dimensions; only duplicates reserve count space. Side bars stack inline counts under the icon. Wide counts fall back to inline layout to preserve the full numeric value. Focus reveal fits backwards from the target in one pass.
 
 Inline count appearance can be plain or bubbled without changing layout dimensions. Overlay counts retain their bubble independently of this option.
+
+## 2.0 automatic sizing
+
+The supported `noctalia.getSetting` API was introduced at API 26 and records configuration dependencies for onConfigChanged notifications. Auto reads complete bar/widget tables, matches configured placements on barWidget.outputName()/isVertical(), and uses noctalia.outputs() for monitor descriptions. No new minimum API is needed. The module does not call private host geometry methods. Automatic sizing is a conservative configuration-based fit; a native per-placement resolved-geometry API would remove matching ambiguity.
+
+Manifest `visible_when = { key = "sizing_mode", values = ["manual"] }` hides min_width, collapsed_width, icon_size, icon_spacing and capsule_radius in Auto. sizing_bar is Auto-only. This is deliberately limited to size controls, as requested; other plugin controls remain on the main Widget settings page. Saved manual values are never overwritten. Host-measured GUI behavior still needs a desktop check.
