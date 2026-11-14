@@ -20,7 +20,7 @@ Application identities remain exact for matching, while titles are normalized an
 - [Umbriel IPC](https://github.com/noctalia-dev/umbriel/blob/33a782dc750e78f0ef2d21fd9d3df33229ae06f9/docs/user/ipc.md): snapshots and public actions.
 - [niri IPC definitions](https://github.com/YaLTeR/niri/blob/73a04441fccc78294c3899af8f8cdd2a1e38fa33/niri-ipc/src/lib.rs): initial events, deltas, focus and urgency.
 - [Hyprland IPC implementation](https://github.com/hyprwm/Hyprland/blob/0767f6347a69607638a4f93b3cd613af15a121e0/src/ipc/s1/Commands.cpp): legacy/current workspace addresses and JSON query fields; public socket2 events.
-- [Mango IPC documentation](https://github.com/DreamMaoMao/mangowc/blob/ba0c8d9859f9142d1cfcc61f39f289c545661fb9/docs/ipc.md): watch snapshots and client-targeted dispatch; checked against src/ipc/ipc.c.
+- [Mango IPC documentation](https://github.com/mangowm/mango/blob/ba0c8d9859f9142d1cfcc61f39f289c545661fb9/docs/ipc.md): watch snapshots and client-targeted dispatch; checked against src/ipc/ipc.c.
 - [Sway IPC manual](https://man.archlinux.org/man/sway-ipc.7.en): i3 framing, subscription and tree/workspace queries.
 
 No compositor source is patched or imported. A compositor version lacking the documented protocol may require an update. Automatic detection uses the native host name or compositor socket environment; explicit compatibility selection is a safety restriction, not a way to connect to another session.
