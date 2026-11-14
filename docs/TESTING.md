@@ -4,14 +4,14 @@ Executed on 2026-11-13 in the attached Linux cloud environment.
 
 ## Checks that actually ran
 
-- **45 executable Luau fixture tests passed** (35 widget scenarios plus 10 API 52/53 compatibility tests). The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
+- **55 executable Luau fixture tests passed** (45 native/backend scenarios plus 10 API 52/53 compatibility tests). The harness executes the shipped model, compositor adapter, and widget entry with deterministic public host functions, event callbacks, UI constructors, and a simulated clock. It does not emulate native layout or real input delivery.
 - **9,100 layout combinations** exercised within the width test: maximum extents 48–496 by 7, icon sizes 12–48 by 6, counts 0/1/5/16/100, and hover scales 1/1.05/1.15/1.5. Includes cross-field minimum width exceeding maximum width. Every computed root extent stayed within its maximum; capacity never became zero.
 - Default side-bar tree width fits the standard 34-pixel bar; vertical main-axis extent is bounded. This is a tree assertion, not a rendered DPI check.
 - **Official community manifest validation passed**, using exact community-pinned validator commit `99a892dc9cb3490634412701c45acd024fe0383b`.
 - **All 178 tests of that official validator passed.** Those tests validate the validator, not Smart Taskbar's desktop behavior.
 - All four shipped Luau files compiled with the official `luau-compile --null` command. Luau CLI commit: `f46d879e28302a430029304f7f6a162aed66f103`.
 - Additional package checks verify custom catalog consistency, setting defaults/translations, the single-widget architecture, and required assets.
-- **One real-pipe shell integration test passed** with a fake Umbriel CLI: exact command arguments, JSON-line snapshot forwarding, reset on disconnect, two-second reconnect, no restarts while connected/idle, and child-process cleanup on process-group cancellation. This does not start a real compositor or Noctalia.
+- **Two real-pipe shell integration tests passed** with fake Umbriel and niri CLIs: exact command arguments, JSON-line snapshot forwarding, reset on disconnect, two-second reconnect, no restarts while connected/idle, and child-process cleanup on process-group cancellation. This does not start a real compositor or Noctalia.
 - The API 52/53 harness runs the actual entry with `noctalia.compositor` absent, covering startup, grouped actions, malformed lines, reconnect resets, cached replay without duplicate streams, missing commands, idle updates, and exit callback detachment.
 - The fixture confirms 1,000 idle `update()` callbacks issue **zero renders and zero icon lookups**. This is not a CPU, memory, latency, or native idle-resource measurement.
 
@@ -81,3 +81,11 @@ Version 0.1.2 regression coverage includes last-window hiding/recovery, filtered
 Release 0.1.2 source CI run `43502864159` and community validation run `43502880213` passed on GitHub. Native desktop acceptance is still separate from these automated results.
 
 Version 0.1.3 package checks confirm every plugin control is exposed on the same host editor page. Labels retain no category prefix. Runtime tests retain coverage that saved legacy editor values do not reset expansion or icons. Native accordion section layout is not supported by the current public manifest API.
+
+## Multi-compositor release candidate
+
+14 Python bridge tests passed: 11 normalization/framing tests and three integration tests that execute the shipped helper against actual local UNIX socket fixtures for Hyprland, Mango and Sway. These cover public wire framing, initial subscription, event updates, reconnect, geometry deduplication, burst coalescing and no idle queries. Socket tests required sandbox escalation in this environment. They do not run real compositors.
+
+Additional Luau tests cover niri urgency, ignored geometry/layout changes, atomic chunk assembly, cached replay, Mango multi-tag filters, stable workspace icons, missing application IDs and targeted CLI argument validation/timeouts. Idle callbacks neither render nor rearm the update timer. Reproduce bridge checks with `PYTHONDONTWRITEBYTECODE=1 python3 tests/bridge_test.py`; reproduce shell checks with `python3 tests/stream_test.py`.
+
+Repeat the full desktop matrix separately under Umbriel, niri, Hyprland, Mango and Sway before claiming production desktop acceptance. Python/socket fixture results do not establish actual window actions, monitor scaling or resource measurements.

@@ -13,7 +13,7 @@ Expand **Widget** in the normal editor. All plugin controls are available togeth
 | Applications | `grouping` | `"app"` | Unknown application IDs remain separate. Workspace groups use a representative application icon. |
 | Applications | `workspace_filter` | `"all"` | Active uses compositor active or focused workspaces; combines with output filtering. |
 | Applications | `output_filter` | `"all"` | Current means this bar instance’s output, not the globally focused monitor. |
-| Applications | `show_minimized` | `true` | Umbriel reports minimized state; unavailable state is treated as not minimized. |
+| Applications | `show_minimized` | `true` | Umbriel and Mango report minimized state; unavailable state is treated as not minimized. |
 | Applications | `sorting` | `"launch"` | Launch order means first observed order. Manual order is per instance and resets on reload. |
 | Applications | `pinned_apps` | `[]` | Exact desktop-entry IDs for launchers. Launchers appear with matching open windows; the entire widget hides when no matching windows remain. |
 | Applications | `exclusions` | `[]` | Exact normalized desktop/application IDs. No shell patterns. |
@@ -40,6 +40,6 @@ Expand **Widget** in the normal editor. All plugin controls are available togeth
 | Interaction | `scroll_step` | `1` | Application items per wheel gesture in item mode. |
 | Interaction | `auto_reveal_focused` | `true` | Reveal on focus changes and expansion. Manual wheel navigation remains usable until focus changes. |
 | Advanced | `app_aliases` | `{}` | Map normalized unusual application IDs to desktop-entry IDs. Matching ignores case and a .desktop suffix. |
-| Advanced | `refresh_fallback` | `60` | Retry interval if subscription startup fails. A disconnected Umbriel CLI stream reconnects after two seconds. |
+| Advanced | `refresh_fallback` | `60` | Retry interval if subscription startup fails. CLI streams reconnect after two seconds; socket bridges use 1–30 second backoff. |
 | Advanced | `diagnostic_logging` | `false` | Log subscription and action errors. Window titles are not logged. |
-| Advanced | `compositor_compatibility` | `"auto"` | Umbriel supports API 52+. niri requires API 54 for native events. |
+| Advanced | `compositor_compatibility` | `"auto"` | Auto-detect Umbriel, niri, Hyprland, Mango or Sway. |

@@ -2,6 +2,7 @@
 local now, tree, renders, interval = 0, nil, 0, 0
 local eventCallback, actions, notices, calls = nil, {}, {}, {}
 local widgetVisible = true
+local intervalWrites,lastCommandCallback = 0,nil
 local vertical, output, resolverCalls = false, "DP-1", 0
 local settings = table.clone(defaults)
 local translations = {
@@ -31,7 +32,7 @@ end
 local noctalia = {
   getConfig = function(key) assert(settings[key] ~= nil, "Undeclared config: " .. key); return settings[key] end,
   nowMs = function() return now end,
-  setUpdateInterval = function(ms) interval = ms end,
+  setUpdateInterval = function(ms) interval=ms; intervalWrites+=1 end,
   log = function(_) end,
   appIconPath = function(app, _)
     resolverCalls += 1
@@ -41,7 +42,7 @@ local noctalia = {
   notify = function(_, text) table.insert(notices, text) end,
   notifyError = function(_, text) table.insert(notices, text) end,
   commandExists = function(_) return true end,
-  runAsync = function(argv, cb) table.insert(calls, argv); if cb then cb({ exitCode = 0, stderr = "" }) end; return true end,
+  runAsync = function(argv, cb) lastCommandCallback=cb~=nil; table.insert(calls, argv); if cb then cb({ exitCode = 0, stderr = "" }) end; return true end,
   openSettings = function() table.insert(calls, "settings") end,
   compositor = {
     name = function() return "umbriel" end,

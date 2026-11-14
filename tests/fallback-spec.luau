@@ -51,10 +51,19 @@ check("missing CLI or failed stream launch degrades without throwing", function(
   host.runStream=function() return false end
   equal(module_transport.new(host).subscribe({},function() end),nil)
 end)
-check("API53 niri degrades without calling absent native functions", function()
+check("API53 niri streams public JSON events without native functions", function()
   environment.XDG_CURRENT_DESKTOP="niri"; environment.NIRI_SOCKET="/fixture/niri.sock"
-  local t=module_transport.new(noctalia); equal(t.name,"niri")
-  equal(t.subscribe({},function() end),nil)
+  local host=table.clone(noctalia)
+  local rawCallback,command
+  host.runStream=function(value,callback) command=value; rawCallback=callback; return true end
+  local t=module_transport.new(host); equal(t.name,"niri")
+  local snapshot
+  assert(t.subscribe({},function(event,data) if event=="snapshot" then snapshot=data end end))
+  equal(command,module_transport.niriCommand)
+  packets.niri={WindowsChanged={windows={{id=9,app_id="a",title="A",workspace_id=2,is_focused=true}}}}
+  rawCallback("niri"); equal(snapshot.windows[1].id,"9")
+  packets.niri={WorkspacesChanged={workspaces={{id=2,output="DP-1",idx=1,is_active=true}}}}
+  rawCallback("niri"); equal(snapshot.windows[1].output,"DP-1")
 end)
 check("exit detaches callbacks until host-owned process teardown", function()
   onExit(); deliver("reset"); equal(#groups,1)

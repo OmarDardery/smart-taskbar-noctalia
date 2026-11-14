@@ -1,6 +1,6 @@
 # Distribution and publication status
 
-Version **0.1.3 preview**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **52**.
+Version **1.0.0 release candidate**, canonical plugin ID `omardardery/smart-taskbar`, entry `taskbar`, minimum API **52**.
 
 The publisher created the public source repository [OmarDardery/smart-taskbar-noctalia](https://github.com/OmarDardery/smart-taskbar-noctalia) and [community fork](https://github.com/OmarDardery/community-plugins). The repository name differs from the canonical plugin ID; the plugin directory remains `smart-taskbar/`, as required by Noctalia.
 
@@ -50,3 +50,5 @@ Updating PR #1434's title/body and marking it ready were both attempted after va
 Version 0.1.3 removes the settings selector and makes all plugin controls visible together in the host Widget section. Separate native sections cannot be declared by the current plugin manifest API; the missing group/section capability is documented in `upstream-settings-sections-request.md`.
 
 The v0.1.3 native-settings-sections feature request was prepared and issue creation attempted. GitHub rejected it with HTTP 403 (`Resource not accessible by integration`), so it remains a local/public documentation draft, not a filed upstream issue.
+
+Version 1.0.0 adds public-protocol Hyprland, Mango and Sway adapters, API 52/53 niri events, event deduplication, coalesced snapshots and stable multi-tag/workspace grouping. Automated protocol coverage does not replace live desktop acceptance. The GitHub release is marked prerelease until that acceptance is recorded.

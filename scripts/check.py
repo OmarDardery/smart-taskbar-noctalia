@@ -36,6 +36,8 @@ for entry in plugin.rglob('*.luau'):
     assert 'ui.scroll' not in text
     if entry.name != 'transport.luau':
         assert 'runStream(' not in text
+assert 'python3' in manifest['dependencies']
+assert (plugin/'lib/bridge.py').is_file()
 assert (plugin/'LICENSE').is_file()
 assert len(list((plugin/'screenshots').glob('*.png'))) == 4
 print('PASS catalog consistency, setting defaults/translations, single-entry architecture, and package assets')

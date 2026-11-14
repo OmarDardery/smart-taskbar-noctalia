@@ -8,17 +8,17 @@
 
 ## What it does
 
-Smart Taskbar is one API 52+ Luau bar widget with stable collapsed extent, grouped numeric counts, supported hover expansion, click/always modes, and a bounded 420-logical-pixel default expanded extent. Overflow uses a clipped virtualized icon strip with wheel navigation and focus reveal. Umbriel is the primary adapter; niri receives events natively and uses its CLI on explicit focus/close actions.
+Smart Taskbar is one API 52+ Luau bar widget with stable collapsed extent, grouped numeric counts, supported hover expansion, click/always modes, and a bounded 420-logical-pixel default expanded extent. Overflow uses a clipped virtualized icon strip with wheel navigation and focus reveal. Umbriel is the primary adapter; niri receives native or JSON CLI events. Hyprland, Mango and Sway use public local socket protocols through one host-owned Python helper.
 
 Empty states hide the entire widget. Single-window apps have no count marker or placeholder lane; duplicates show numeric corner badges only. Optional hover enlargement uses paint transforms in fixed cells, and all settings are visible together in the main Widget editor, with related fields adjacent and no page selector.
 
-Manual drag ordering stays within the widget and is in-memory. In manual mode expansion stays open until explicitly clicked because the public API lacks drag-start/end callbacks. Right click opens settings because native context menus are panel-only. Pin lists are settings-driven because configuration is read-only. Version 0.1.3 supports Umbriel on API 52/53 through its public CLI event stream; API 54+ uses native subscriptions. The host’s API range is authoritative.
+Manual drag ordering stays within the widget and is in-memory. In manual mode expansion stays open until explicitly clicked because the public API lacks drag-start/end callbacks. Right click opens settings because native context menus are panel-only. Pin lists are settings-driven because configuration is read-only. Version 1.0.0 supports Umbriel on API 52/53 through its public CLI event stream; API 54+ uses native subscriptions. The host’s API range is authoritative.
 
 **Desktop acceptance remains pending.** The cloud environment has no Noctalia/compositor executable/session. Native installation, compositor actions, screenshots, device gestures, scaling and resource measurements are pending. The visual assets are clearly labeled offline fixture previews, not live screenshots.
 
 ## External dependencies
 
-Manifest dependencies: `umbriel` and `sleep` (one reconnecting host-managed CLI event stream on API 52/53), `gtk-launch` (only explicit pinned desktop launches) and `niri` (only niri focus/close actions). Commands use argument arrays. Umbriel window actions use the host API; subscriptions prefer native API 54 and use `runStream` on API 52/53. No subprocess polling, daemon, database, or state file. The single host-owned shell/CLI stream reconnects after two seconds on disconnection; Noctalia cancels its process group on reload/disable.
+Conditional manifest dependencies: `umbriel`, `niri`, `sleep` for older-shell CLI streams; `python3` for Hyprland/Mango/Sway local socket streams; `hyprctl`, `mmsg`, `swaymsg` for explicit window actions; `gtk-launch` for detached pinned desktop-entry launches. Umbriel actions use the host API. All CLI actions use validated argv arrays and timeouts. Native Umbriel/niri subscriptions are preferred on API 54+. Socket helpers coalesce relevant events and perform no idle polling. No daemon, database or state file. Host process groups own stream cleanup on teardown.
 
 Network calls: none. Filesystem writes: none. Host icon lookup reads icon/desktop-entry files through `appIconPath`. Window titles are displayed locally and never logged. No downloaded code executes at plugin runtime.
 
@@ -31,7 +31,7 @@ Network calls: none. Filesystem writes: none. Host icon lookup reads icon/deskto
 - **Noctalia version tested against:** no running shell; source/API reviewed at core commit `42581ce5d3599be9cf54e971607c2d3ae43525fe`
 - **Plugin API level:** 52
 
-45 Luau fixture tests pass, including 9,100 width combinations, five-window badge/cycling, twenty-app overflow, focus reveal, filters, aliases, pinned running windows, drag reorder, safe actions, setting changes and reset recovery. All four sources compile with `luau-compile`. Canonical community manifest validation passes at the exact community-pinned validator `99a892dc9cb3490634412701c45acd024fe0383b`, whose 178 tests also pass. A real-pipe shell integration test verifies snapshot framing, disconnect reset, reconnect, and process-group cleanup with a fake Umbriel CLI. Noctalia desktop acceptance remains pending.
+55 Luau fixture tests pass, including 9,100 width combinations, five-window badge/cycling, twenty-app overflow, focus reveal, filters, aliases, pinned running windows, drag reorder, safe actions, setting changes and reset recovery. All four sources compile with `luau-compile`. Canonical community manifest validation passes at the exact community-pinned validator `99a892dc9cb3490634412701c45acd024fe0383b`, whose 178 tests also pass. Two real-pipe shell integration tests verify snapshot framing, disconnect reset, reconnect, and process-group cleanup with a fake Umbriel CLI. Noctalia desktop acceptance remains pending.
 
 ## Screenshots / Videos
 
@@ -67,3 +67,5 @@ Plugins run as trusted, unsandboxed Luau in the user's session. Confirm:
 - [x] I have the right to publish this code under the `license` declared in `plugin.toml`.
 
 The compositor testing requirement remains unchecked; no unrun desktop test is represented as passed. No non-English translations are included.
+
+14 additional Python tests cover normalization, bounded framing and real local UNIX-socket fixtures for Hyprland, Mango and Sway. No live compositor result is claimed.

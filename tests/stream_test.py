@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exercise the shipped shell program with a fake Umbriel CLI, real pipes and signals.
+"""Exercise the shipped shell program with fake Umbriel/niri CLIs, real pipes and signals.
 This tests framing/reconnect/process-group cleanup, not a running compositor or Noctalia.
 """
 import json
@@ -14,29 +14,38 @@ import time
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMAND = (ROOT/'smart-taskbar/lib/transport.luau').read_text().split('M.umbrielCommand = [[',1)[1].split(']]',1)[0]
+SOURCE = (ROOT/'smart-taskbar/lib/transport.luau').read_text()
+COMMANDS = {name: SOURCE.split('M.'+name+'Command = [[',1)[1].split(']]',1)[0] for name in ('umbriel','niri')}
 
 class StreamTest(unittest.TestCase):
-    def test_reconnect_and_process_group_cleanup(self):
+    def test_umbriel_reconnect_and_process_group_cleanup(self):
+        self.check_stream('umbriel')
+
+    def test_niri_reconnect_and_process_group_cleanup(self):
+        self.check_stream('niri')
+
+    def check_stream(self, name):
         with tempfile.TemporaryDirectory() as directory:
             temp = Path(directory)
-            cli = temp/'umbriel'
-            cli.write_text('#!'+sys.executable+'\n'+'''
+            cli = temp/name
+            args = ['subscribe','windows','workspaces'] if name=='umbriel' else ['msg','--json','event-stream']
+            cli.write_text('#!'+sys.executable+'\n'+'expected='+repr(args)+'\n'+'kind='+repr(name)+'\n'+'''
 import json, os, pathlib, sys, time
-assert sys.argv[1:] == ["subscribe", "windows", "workspaces"]
+assert sys.argv[1:] == expected
 state = pathlib.Path(os.environ["STREAM_TEST_STATE"])
 with state.open("a") as f: f.write(str(os.getpid()) + "\\n")
 connection = len(state.read_text().splitlines())
 if connection == 1:
-    print(json.dumps({"event":"windows","data":[{"id":"one"}]}),flush=True)
+    print(json.dumps({"event":"windows","data":[{"id":"one"}]} if kind=="umbriel" else {"WindowsChanged":{"windows":[{"id":1}]}}),flush=True)
 else:
-    print(json.dumps({"event":"workspaces","data":[]}),flush=True)
+    print(json.dumps({"event":"workspaces","data":[]} if kind=="umbriel" else {"WorkspacesChanged":{"workspaces":[]}}),flush=True)
     time.sleep(60)
 ''')
             cli.chmod(0o755)
             state=temp/'pids'
+            state.touch()
             env=dict(os.environ,PATH=directory+os.pathsep+os.environ['PATH'],STREAM_TEST_STATE=str(state))
-            process=subprocess.Popen(['/bin/sh','-c',COMMAND],env=env,stdout=subprocess.PIPE,
+            process=subprocess.Popen(['/bin/sh','-c',COMMANDS[name]],env=env,stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE,start_new_session=True)
             selector=selectors.DefaultSelector()
             selector.register(process.stdout,selectors.EVENT_READ)
@@ -52,9 +61,11 @@ else:
                         while b'\n' in pending:
                             line,pending=pending.split(b'\n',1)
                             messages.append(json.loads(line))
-                self.assertEqual([m['event'] for m in messages],
-                                 ['reset','windows','reset','reset','workspaces'])
-                self.assertEqual(messages[1]['data'][0]['id'],'one')
+                self.assertEqual([m.get('event') or next(iter(m)) for m in messages],
+                                 ['reset','windows' if name=='umbriel' else 'WindowsChanged',
+                                  'reset','reset','workspaces' if name=='umbriel' else 'WorkspacesChanged'])
+                if name=='umbriel':self.assertEqual(messages[1]['data'][0]['id'],'one')
+                else:self.assertEqual(messages[1]['WindowsChanged']['windows'][0]['id'],1)
                 self.assertEqual(len(state.read_text().splitlines()),2)
                 # An idle, connected CLI must not be restarted by a timer.
                 self.assertFalse(selector.select(timeout=0.2))

@@ -48,7 +48,7 @@ Umbriel is implemented using window/workspace snapshots and typed native actions
 
 On API 54+, niri is implemented with native `WindowsChanged`, `WindowOpenedOrChanged`, `WindowClosed`, `WindowFocusChanged`, `WorkspacesChanged`, and `WorkspaceActivated` events. Focus and close use `niri msg action ... --id`. Minimize is unavailable. Compositor integration has fixture coverage only.
 
-Hyprland subscriptions are available, but provide string deltas and no initial snapshot or native plugin action method. Correct support needs an asynchronous, coalesced `hyprctl -j clients` / workspace snapshot reconciler, including reconnect races and address validation. This release deliberately declines that backend; it does not spawn repeated commands or pretend the normalized Umbriel schema applies to Hyprland. Sway/Mango/labwc/KDE subscriptions are not exposed by API 54 and also stay hidden.
+Hyprland uses public socket2 events and socket1 JSON snapshots, subscribing before initial queries. Mango merges its public all-clients/all-monitors watches. Sway uses public i3 IPC subscriptions and event-triggered tree/workspace snapshots. These backends use a host-owned Python helper rather than unsupported native plugin subscriptions. See [COMPATIBILITY.md](COMPATIBILITY.md) for reviewed upstream sources and capabilities.
 
 ## Missing capability
 
@@ -62,10 +62,12 @@ The public [Umbriel IPC documentation](https://github.com/noctalia-dev/umbriel/b
 
 Noctalia’s process implementation creates a process group and cancels the group on `runStream` teardown. Because there is no individual public stream-stop method, compatibility-setting toggles detach delivery while retaining one connection and the latest full snapshots until reload/disable. Resuming replays snapshots without creating another stream. Host teardown owns shell, CLI and sleep cleanup. The real-pipe integration test verifies equivalent process-group termination with a fake CLI; actual Noctalia teardown still needs desktop acceptance.
 
-The fallback never touches `noctalia.compositor` methods when the namespace is absent. On API 52/53, niri and other compositors remain hidden; this release does not invent a native action or event method for them.
+The fallback never touches `noctalia.compositor` methods when the namespace is absent. On API 52/53, niri uses its documented JSON event stream. Hyprland, Mango and Sway use the same public socket helper on every supported plugin API level.
 
 Version 0.1.2 adds optional hover magnification using public API 52 paint transforms. Cells reserve the maximum icon size, root extents remain bounded, and animation ends without an idle frame loop. Empty filtered results (including pin-only results with no matching running windows) hide the entire widget.
 
 ## Settings-section capability gap
 
 Version 0.1.3 removes the page selector and conditional visibility from all plugin controls. `ManifestField` has no group, heading, or section member. `manifestSettingSpecs` assigns each plugin field the default `WidgetSettingPresentation.group = "widget"`. Built-in widget sections exist internally, but are not exposed through the public plugin schema. Adding an unrecognized `group` property would not create them. See [the focused upstream request](upstream-settings-sections-request.md).
+
+The bridge chunks snapshots into sub-32-KiB JSON envelopes to respect the host stream-line bound. The Luau transport validates sequence and size and publishes only complete snapshots. CLI actions use argv arrays, validated compositor window IDs and a five-second timeout. Pinned launchers are detached so widget reload does not terminate launched applications.

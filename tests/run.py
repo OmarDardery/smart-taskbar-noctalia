@@ -30,12 +30,18 @@ def run_suite(fallback=False):
         source += (ROOT / 'tests/fallback-host.luau').read_text() + '\n'
     for name in ('model', 'compositor', 'transport'):
         source += 'local module_' + name + ' = (function()\n'
-        source += (PLUGIN / 'lib' / (name + '.luau')).read_text() + '\nend)()\n'
+        module = (PLUGIN / 'lib' / (name + '.luau')).read_text()
+        module = module.replace('require("./compositor.luau")', 'module_compositor')
+        source += module + '\nend)()\n'
     widget = (PLUGIN / 'widget.luau').read_text()
     widget = widget.replace('require("./lib/model.luau")', 'module_model')
     widget = widget.replace('require("./lib/compositor.luau")', 'module_compositor')
     widget = widget.replace('require("./lib/transport.luau")', 'module_transport')
-    source += widget + '\n' + (ROOT / ('tests/fallback-spec.luau' if fallback else 'tests/spec.luau')).read_text()
+    suite = (ROOT / ('tests/fallback-spec.luau' if fallback else 'tests/spec.luau')).read_text()
+    if not fallback:
+        marker = 'check("hot reload teardown unsubscribes"'
+        suite = suite.replace(marker, (ROOT/'tests/backends-spec.luau').read_text()+'\n'+marker)
+    source += widget + '\n' + suite
     with tempfile.TemporaryDirectory() as temp:
         entry = Path(temp) / 'suite.luau'
         entry.write_text(source)
