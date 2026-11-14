@@ -15,6 +15,10 @@ Executed on 2026-11-13 in the attached Linux cloud environment.
 - The API 52/53 harness runs the actual entry with `noctalia.compositor` absent, covering startup, grouped actions, malformed lines, reconnect resets, cached replay without duplicate streams, missing commands, idle updates, and exit callback detachment.
 - The fixture confirms 1,000 idle `update()` callbacks issue **zero renders and zero icon lookups**. This is not a CPU, memory, latency, or native idle-resource measurement.
 
+## Author-reported desktop testing
+
+The author reports testing on Umbriel. It is the only compositor tested on a real desktop. niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only. No detailed per-scenario results were supplied, so the matrix below records the cloud agent’s checks and does not mark individual desktop scenarios passed.
+
 ## Acceptance matrix
 
 “Fixture passed” below means executable logic coverage only. No row claims a live compositor test.

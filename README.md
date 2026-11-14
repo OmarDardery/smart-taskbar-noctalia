@@ -1,5 +1,7 @@
 # Smart Taskbar
 
+**Desktop testing: Umbriel only (author-reported). niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only; real desktop compatibility is unverified.**
+
 A Noctalia **API 52+** application switcher, distributed as one bar widget. Source and installation documentation are in [smart-taskbar/README.md](smart-taskbar/README.md).
 
 Version 1.0.0 is a release candidate. The Luau fixture tests and official community manifest validation run locally; live Noctalia desktop validation is pending. Umbriel now works with API 52/53 through its public CLI stream. API 54+ uses native subscriptions. Match the host’s reported API range; version labels alone are insufficient.
