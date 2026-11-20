@@ -1,11 +1,11 @@
 # Compositor compatibility
 
-Minimum Noctalia plugin API: **52**. Version 2.0.0 is a release candidate; Umbriel is the only compositor tested on a real desktop, as reported by the author. niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only; their real desktop compatibility is unverified. The complete acceptance matrix remains pending.
+Minimum Noctalia plugin API: **52**. Version 2.0.1 is a release candidate; Umbriel is the only compositor tested on a real desktop, as reported by the author. niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only; their real desktop compatibility is unverified. The complete acceptance matrix remains pending.
 
 | Compositor | Event transport | Focus/close | Minimize/restore | Notes |
 | --- | --- | --- | --- | --- |
-| Umbriel | Native API 54+; public CLI stream on API 52/53 | Native host actions | Native minimize; focus restores | Primary adapter; workspace/output snapshots |
-| niri | Native API 54+; JSON CLI stream on API 52/53 | `niri` CLI | Unavailable | Includes urgency and workspace events |
+| Umbriel | Native `noctalia.compositor` events when present; public CLI stream otherwise | Native host actions | Native minimize; focus restores | Primary adapter; workspace/output snapshots |
+| niri | Native `noctalia.compositor` events when present; JSON CLI stream otherwise | `niri` CLI | Unavailable | Includes urgency and workspace events |
 | Hyprland | Public socket2 events plus socket1 JSON queries | `hyprctl` CLI | Unavailable | Subscribes before snapshots; coalesces relevant events |
 | Mango | Public all-clients/all-monitors socket watches | `mmsg` targeted client dispatch | Targeted minimize; focus restores | Multi-tag membership counts each window once |
 | Sway | Public i3 IPC subscription/tree/workspaces | `swaymsg` targeted con_id | Unavailable | Floating/Xwayland windows included; hidden scratchpad excluded |

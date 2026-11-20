@@ -35,9 +35,9 @@ The PR description was filled in, but upstream enforcement flagged three shorten
 
 ## Version 0.1.1 compatibility update
 
-The user’s desktop reports API range 3–53. Version 0.1.1 lowers the minimum to API 52 by adding a public Umbriel CLI event transport; API 54 native subscriptions remain optional. The code has 34 passing Luau fixture tests and one passing real-pipe/process-group test with a fake CLI. Actual desktop execution remains pending. Both the custom source and existing community PR branch carry the update; no new PR is required.
+The user’s desktop reports API range 3–53. Version 0.1.1 lowers the minimum to API 52 by adding a public Umbriel CLI event transport; native compositor subscriptions remain optional. The code has 34 passing Luau fixture tests and one passing real-pipe/process-group test with a fake CLI. Actual desktop execution remains pending. Both the custom source and existing community PR branch carry the update; no new PR is required.
 
-The upstream PR title/body may still mention API 54 until edited manually. Use the updated prepared body in `docs/community-pr.md` and title **Add Smart Taskbar application switcher (API 52 preview)** when updating its metadata. Keep it draft.
+The upstream PR title/body may still mention a non-existent API 54 until edited manually. Use the updated prepared body in `docs/community-pr.md` and title **Add Smart Taskbar application switcher (API 52 preview)** when updating its metadata. Keep it draft.
 
 Version 0.1.2 adds hide-on-empty, numeric-only duplicate badges without placeholder lanes, native conditional settings pages, and optional bounded icon magnification. The user requested making PR #1434 ready for review after pushing. The transition is attempted without converting unrun desktop checks into passed tests; the upstream ready-state bot requires a checked compositor test.
 
@@ -51,6 +51,6 @@ Version 0.1.3 removes the settings selector and makes all plugin controls visibl
 
 The v0.1.3 native-settings-sections feature request was prepared and issue creation attempted. GitHub rejected it with HTTP 403 (`Resource not accessible by integration`), so it remains a local/public documentation draft, not a filed upstream issue.
 
-Version 1.0.0 adds public-protocol Hyprland, Mango and Sway adapters, API 52/53 niri events, event deduplication, coalesced snapshots and stable multi-tag/workspace grouping. Automated protocol coverage does not replace live desktop acceptance. The GitHub release is marked prerelease until that acceptance is recorded.
+Version 1.0.0 adds public-protocol Hyprland, Mango and Sway adapters, CLI-stream niri events, event deduplication, coalesced snapshots and stable multi-tag/workspace grouping. Automated protocol coverage does not replace live desktop acceptance. The GitHub release is marked prerelease until that acceptance is recorded.
 
 Version 2.0.0 polishes count badges and adds inline capsule placement with width-aware overflow. Only Umbriel has author-reported desktop testing; these new visual changes still require a desktop recheck. Other compositor adapters have automated fixtures only.

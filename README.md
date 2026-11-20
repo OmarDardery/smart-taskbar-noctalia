@@ -2,7 +2,7 @@
 
 A compact Noctalia API 52+ application switcher with automatic bar sizing, grouped window counts, optional hover enlargement and bounded overflow navigation.
 
-**Only Umbriel has author-reported desktop testing.** niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only. Version 2.0.0 is a release candidate; its new sizing behavior needs a desktop recheck.
+**Only Umbriel has author-reported desktop testing.** niri, Hyprland, Mango and Sway have automated fixture/protocol coverage only. Version 2.0.1 is a release candidate; its new sizing behavior needs a desktop recheck.
 
 ## Install or update
 

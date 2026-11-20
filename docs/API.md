@@ -29,7 +29,7 @@ References were read before implementation on 2026-11-13:
 | Palette | Public theme roles including containers, API 43; the host repaints on palette changes |
 | Icons | Cached public `appIconPath`, including host desktop matching; no icon subprocesses |
 | Umbriel actions | `noctalia.umbriel.action`, API 45, `window-focus`, `window-close`, `window-minimize` as used by Noctalia's Umbriel backend |
-| Events | API 54 native subscriptions when available; API 52/53 Umbriel uses public `runStream` and `umbriel subscribe windows workspaces` |
+| Events | Native `noctalia.compositor` subscriptions when the host provides them; otherwise Umbriel uses public `runStream` and `umbriel subscribe windows workspaces` |
 | niri actions | CLI argument arrays only on user action; no native niri action method exposed to plugins |
 | Context menu | `panel.openContextMenu` is panel-only; no extra panel added for this single-widget release |
 | Pin/unpin | Settings API is read-only. Pin lists are edited in normal widget settings |
@@ -40,13 +40,13 @@ References were read before implementation on 2026-11-13:
 | Count badges | Numeric only, for counts above one; paint transforms overlay the icon corner without a layout lane |
 | Manual persistence | In-memory per instance; no undocumented settings write or state file |
 
-Version 0.1.1 requires API 52 for public container clipping. Native API 54 subscriptions are optional and used only after feature detection. On API 52/53, Umbriel events use its documented CLI through `runStream`, an existing public plugin API. Match the host’s reported API range instead of assuming every build with the same version label exposes identical capabilities. The user reported Noctalia v5.4.1 (`b096daa`) with API range 3–53; the published upstream v5.4.1 tag fetched separately reports an earlier API ceiling, so this compatibility claim is explicitly based on API level rather than all v5.4.1 packages.
+Version 0.1.1 requires API 52 for public container clipping. Native compositor subscriptions are optional and used only after feature detection of `noctalia.compositor`. Without them, Umbriel events use its documented CLI through `runStream`, an existing public plugin API. Match the host’s reported API range instead of assuming every build with the same version label exposes identical capabilities. The user reported Noctalia v5.4.1 (`b096daa`) with API range 3–53; the published upstream v5.4.1 tag fetched separately reports an earlier API ceiling, so this compatibility claim is explicitly based on API level rather than all v5.4.1 packages.
 
 ## Compositor evaluation
 
 Umbriel is implemented using window/workspace snapshots and typed native actions. Core `umbriel_workspace_backend.cpp` provides the reference field/action names; the plugin does not call the C++ backend or other private interfaces. Workspace-to-output mapping prefers workspace snapshot output and falls back to Umbriel's connector-prefixed workspace IDs. Scratchpads without a workspace are hidden, following the core taskbar.
 
-On API 54+, niri is implemented with native `WindowsChanged`, `WindowOpenedOrChanged`, `WindowClosed`, `WindowFocusChanged`, `WorkspacesChanged`, and `WorkspaceActivated` events. Focus and close use `niri msg action ... --id`. Minimize is unavailable. Compositor integration has fixture coverage only.
+When native compositor events are available, niri is implemented with native `WindowsChanged`, `WindowOpenedOrChanged`, `WindowClosed`, `WindowFocusChanged`, `WorkspacesChanged`, and `WorkspaceActivated` events. Focus and close use `niri msg action ... --id`. Minimize is unavailable. Compositor integration has fixture coverage only.
 
 Hyprland uses public socket2 events and socket1 JSON snapshots, subscribing before initial queries. Mango merges its public all-clients/all-monitors watches. Sway uses public i3 IPC subscriptions and event-triggered tree/workspace snapshots. These backends use a host-owned Python helper rather than unsupported native plugin subscriptions. See [COMPATIBILITY.md](COMPATIBILITY.md) for reviewed upstream sources and capabilities.
 
@@ -54,7 +54,7 @@ Hyprland uses public socket2 events and socket1 JSON snapshots, subscribing befo
 
 Continuous pointer scrolling requires a native bar-compatible scroll viewport or continuous delta/offset API. Paint transforms and clipping alone do not provide native inertia or reliable pixel scrolling. The focused upstream request is prepared in [upstream-scroll-request.md](upstream-scroll-request.md). GitHub rejected issue creation with HTTP 403, so it has not been filed.
 
-## API 52/53 Umbriel transport
+## CLI fallback transport (no native compositor events)
 
 The public [Umbriel IPC documentation](https://github.com/noctalia-dev/umbriel/blob/main/docs/user/ipc.md), reviewed at commit `33a782dc750e78f0ef2d21fd9d3df33229ae06f9`, specifies full snapshot subscriptions with initial state. Its CLI `umbriel subscribe windows workspaces` forwards newline-delimited event envelopes and explicitly flushes stdout after each line. `src/cli/ipc_client.cpp` and `src/main.cpp` confirm framing and command arguments.
 
@@ -62,7 +62,7 @@ The public [Umbriel IPC documentation](https://github.com/noctalia-dev/umbriel/b
 
 Noctalia’s process implementation creates a process group and cancels the group on `runStream` teardown. Because there is no individual public stream-stop method, compatibility-setting toggles detach delivery while retaining one connection and the latest full snapshots until reload/disable. Resuming replays snapshots without creating another stream. Host teardown owns shell, CLI and sleep cleanup. The real-pipe integration test verifies equivalent process-group termination with a fake CLI; actual Noctalia teardown still needs desktop acceptance.
 
-The fallback never touches `noctalia.compositor` methods when the namespace is absent. On API 52/53, niri uses its documented JSON event stream. Hyprland, Mango and Sway use the same public socket helper on every supported plugin API level.
+The fallback never touches `noctalia.compositor` methods when the namespace is absent. Without native events, niri uses its documented JSON event stream. Hyprland, Mango and Sway use the same public socket helper on every supported plugin API level.
 
 Version 0.1.2 adds optional hover magnification using public API 52 paint transforms. Cells reserve the maximum icon size, root extents remain bounded, and animation ends without an idle frame loop. Empty filtered results (including pin-only results with no matching running windows) hide the entire widget.
 

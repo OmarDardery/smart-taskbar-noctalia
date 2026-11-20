@@ -1,12 +1,12 @@
 --!nonstrict
 local passed = 0
-local function check(name, fn) fn(); passed += 1; print("PASS API53 " .. name) end
+local function check(name, fn) fn(); passed += 1; print("PASS fallback " .. name) end
 local function equal(a,b) assert(a==b,tostring(a).." ~= "..tostring(b)) end
 local windows = {
   { id="1",app_id="firefox",title="Firefox",workspace="DP-1:1",active=true,minimized=false,minimizable=true },
   { id="2",app_id="firefox",title="Second",workspace="DP-1:1",active=false,minimized=false,minimizable=true },
 }
-check("starts without any API54 namespace", function()
+check("starts without a native compositor namespace", function()
   update(); equal(backend.name,"umbriel"); equal(transport.native,false)
   equal(streamStarts,1); equal(streamCommand,module_transport.umbrielCommand)
 end)
@@ -51,7 +51,7 @@ check("missing CLI or failed stream launch degrades without throwing", function(
   host.runStream=function() return false end
   equal(module_transport.new(host).subscribe({},function() end),nil)
 end)
-check("API53 niri streams public JSON events without native functions", function()
+check("niri streams public JSON events without native functions", function()
   environment.XDG_CURRENT_DESKTOP="niri"; environment.NIRI_SOCKET="/fixture/niri.sock"
   local host=table.clone(noctalia)
   local rawCallback,command
@@ -68,4 +68,4 @@ end)
 check("exit detaches callbacks until host-owned process teardown", function()
   onExit(); deliver("reset"); equal(#groups,1)
 end)
-print(string.format("%d API53 compatibility tests passed",passed))
+print(string.format("%d fallback compatibility tests passed",passed))
