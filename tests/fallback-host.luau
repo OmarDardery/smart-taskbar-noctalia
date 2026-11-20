@@ -1,5 +1,5 @@
 --!nonstrict
--- Model an API 52/53 host with no compositor namespace at all.
+-- Model a host with no compositor namespace at all.
 noctalia.compositor = nil
 local streamCallback, streamStarts, streamCommand = nil, 0, nil
 local packets, packetSerial = {}, 0

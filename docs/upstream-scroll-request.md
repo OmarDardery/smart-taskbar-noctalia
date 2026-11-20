@@ -17,4 +17,4 @@ Requested capability:
 
 A minimal alternative is a declarative bar viewport with offset/revealKey and native wheel handling, rather than exposing raw frame-by-frame script animation.
 
-References reviewed: plugin API versions (52, 54), Declarative UI / barWidget.render, Entry Scripts / onScroll, and current `plugin_widget.cpp` unsupported-control filtering. This request concerns continuous scrolling; discrete overflow navigation already works through supported controls. No private Noctalia interfaces or shell patches are required by the fallback.
+References reviewed: plugin API versions (52), Declarative UI / barWidget.render, Entry Scripts / onScroll, and current `plugin_widget.cpp` unsupported-control filtering. This request concerns continuous scrolling; discrete overflow navigation already works through supported controls. No private Noctalia interfaces or shell patches are required by the fallback.

@@ -6,7 +6,7 @@ local windows = {
   { id="1",app_id="firefox",title="Firefox",workspace="DP-1:1",active=true,minimized=false,minimizable=true },
   { id="2",app_id="firefox",title="Second",workspace="DP-1:1",active=false,minimized=false,minimizable=true },
 }
-check("starts without any API54 namespace", function()
+check("starts without a native compositor namespace", function()
   update(); equal(backend.name,"umbriel"); equal(transport.native,false)
   equal(streamStarts,1); equal(streamCommand,module_transport.umbrielCommand)
 end)
